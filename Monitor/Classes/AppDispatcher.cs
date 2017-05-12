@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Monitor;
+using System.Data;
+using Monitor.Help;
 
 namespace Monitor.Classes
 {
@@ -18,6 +21,7 @@ namespace Monitor.Classes
         public override void Run(AppCommand command)
         {
             if (HandleSystem(command)) return;
+            if (HandleAlarmData(command)) return;
             
         }
 
@@ -29,9 +33,29 @@ namespace Monitor.Classes
                     Debug.Print("ok!");
                     return true;
                 case AppCommand.CloseSystem:
+               //     MainForm.Instance.Close();
                     return true;
                 case AppCommand.StopMonitor:
                     return true;
+                case AppCommand.Status:
+                    Debug.Print("ok!!!");
+                    return true;
+            }
+            return false;
+        }
+
+        private bool HandleAlarmData(AppCommand command)
+        {
+            switch(command)
+            {
+                case AppCommand.LoadAlarm:
+                    Debug.Print("ok!!!");
+                  
+                    return true;
+                case AppCommand.SeeDetails:
+                   
+                    return true;
+
             }
             return false;
         }

@@ -1,4 +1,4 @@
-﻿namespace Monitor
+﻿namespace Monitor.Map
 {
 	partial class MapForm
 	{
@@ -37,7 +37,7 @@
 			this.mnuMeasuringOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.panel1.SuspendLayout();
-			(( System.ComponentModel.ISupportInitialize ) (this.axMap1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.axMap1)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -66,14 +66,14 @@
 			this.axMap1.Enabled = true;
 			this.axMap1.Location = new System.Drawing.Point(0, 0);
 			this.axMap1.Name = "axMap1";
-			this.axMap1.OcxState = (( System.Windows.Forms.AxHost.State ) (resources.GetObject("axMap1.OcxState")));
+			this.axMap1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMap1.OcxState")));
 			this.axMap1.Size = new System.Drawing.Size(402, 243);
 			this.axMap1.TabIndex = 3;
 			// 
 			// contextMenuStrip1
 			// 
 			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.mnuMeasuringOptions});
+            this.mnuMeasuringOptions});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			this.contextMenuStrip1.Size = new System.Drawing.Size(123, 26);
 			// 
@@ -95,13 +95,13 @@
 			this.ClientSize = new System.Drawing.Size(402, 286);
 			this.Controls.Add(this.axMap1);
 			this.Controls.Add(this.panel1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, (( byte ) (0)));
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "MapForm";
 			this.ShowIcon = false;
 			this.Text = "Map";
 			this.panel1.ResumeLayout(false);
-			(( System.ComponentModel.ISupportInitialize ) (this.axMap1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.axMap1)).EndInit();
 			this.contextMenuStrip1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
