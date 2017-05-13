@@ -21,6 +21,7 @@ namespace Monitor
         /// </summary>
         private AppDispatcher _dispatcher = new AppDispatcher();
 		private MapForm _mapForm = null;
+		public AISData ais = new AISData();
 
 		/// <summary>
 		/// 主窗口句柄
@@ -78,17 +79,33 @@ namespace Monitor
 			_mapForm.CloseButton = false;
 			_mapForm.Activate();
 
-			string[] str = { @"D:\Monitor\Monitor\data\test4.shp" };
-
+			#region	加载gis地图
+			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp" };
 			MapLayer.AddLayer(str);
+			#endregion
 
-			DataTable LineData = MySqlData.ReadData(GlobalVar.SqlConn,"Point");
+			//DataTable LineData = MySqlData.ReadData(GlobalVar.SqlConn,"Point");
 
-			//GisPoint.connectToDB(App.dbname);
-			//GisPoint.readData();
-			//GisPoint.SortList();
+			#region	 在地图上划线
+			GisPoint.connectToDB(App.dbname);
+			GisPoint.readData();
+			GisPoint.SortList();
+			MapDraw.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
+				App.m_PointList[10].X, App.m_PointList[10].Y);
+			#endregion
 
-		//	MapDraw.LinePattern(App.m_PointList[0].X,App.m_PointList[0].Y,App.m_PointList[10].X,App.m_PointList[10].Y);
+			#region	  在gis地图中添加ais数据
+			//1、获取数据库中数据
+			SqliteData sqlite = new SqliteData(App.dbname);
+			DataTable gisData = sqlite.readData("Point");
+			//2、转换成ais数据
+			ais = new AISData();
+			ais.IntoAisData(gisData);
+			//3、在地图上加载ais数据
+			MapDraw mapDraw = new MapDraw(MapForm.MapFormAttri.Map, MapForm.MapFormAttri.AISHandle);
+			MapForm.MapFormAttri.AISHandle = mapDraw.LoadAISData(ais);
+			#endregion
+
 		}
 
 		private void InitMenus()

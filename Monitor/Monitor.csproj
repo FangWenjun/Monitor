@@ -103,6 +103,7 @@
     <Compile Include="Classes\gbStructType.cs" />
     <Compile Include="Classes\GetDataFormSql.cs" />
     <Compile Include="Classes\GetDataFromCSV.cs" />
+    <Compile Include="DataTransfer\SqliteData.cs" />
     <Compile Include="GlobalVar.cs" />
     <Compile Include="Classes\Invoke.cs" />
     <Compile Include="Help\MessageHelper.cs" />
@@ -127,8 +128,10 @@
     <Compile Include="Forms\Sign.Designer.cs">
       <DependentUpon>Sign.cs</DependentUpon>
     </Compile>
+    <Compile Include="Map\AISData.cs" />
     <Compile Include="Map\GisPoint.cs" />
     <Compile Include="Map\Linedata.cs" />
+    <Compile Include="Map\MapAlgori.cs" />
     <Compile Include="Map\MapDraw.cs" />
     <Compile Include="Map\MapLayer.cs" />
     <Compile Include="Program.cs" />

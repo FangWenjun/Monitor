@@ -33,28 +33,6 @@ namespace Monitor.Classes
             set{loginconn = value;}
         }
 
-        private static GetDataFromSql disturb_sys_configure = new GetDataFromSql();  //基本配置信息
-        public static GetDataFromSql Disturb_Sys_Configure
-        {
-            get { return disturb_sys_configure; }
-        }
-
-        private static GetDataFromSql map_image_configure = new GetDataFromSql();      //地图图片信息
-        public static GetDataFromSql Map_Image_Configure
-        {
-            get { return map_image_configure; }
-        }
-
-        private static GetDataFromSql map_travel = new GetDataFromSql();           //地图轨迹信息
-        public static GetDataFromSql Map_Travel
-        {
-            get { return map_travel; }
-        }
-
-        private static GetDataFromSql map_text_configure = new GetDataFromSql();     //地图标示信息
-        public static GetDataFromSql Map_Text_Configure
-        {
-            get { return map_text_configure; }
-        }
+   
 	}
 }

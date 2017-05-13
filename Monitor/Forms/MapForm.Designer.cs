@@ -69,6 +69,7 @@
 			this.axMap1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMap1.OcxState")));
 			this.axMap1.Size = new System.Drawing.Size(402, 243);
 			this.axMap1.TabIndex = 3;
+			
 			// 
 			// contextMenuStrip1
 			// 

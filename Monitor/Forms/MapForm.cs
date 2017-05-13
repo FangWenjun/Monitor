@@ -13,7 +13,12 @@ namespace Monitor.Map
     {
 
 		private static MapForm _mapform = null;
-		
+		//用于判断是否已经显示label
+		private int labelFlag;
+
+		//ais图层句柄
+		public  int  AISHandle = -1;
+
 		public static MapForm MapFormAttri
 		{
 			get { return _mapform; }
@@ -23,7 +28,8 @@ namespace Monitor.Map
         {
             InitializeComponent();
 			_mapform = this;
-            InitMap();
+			RegisterEventHandlers();
+			InitMap();
         }
 
         public AxMap Map
@@ -31,24 +37,11 @@ namespace Monitor.Map
             get { return axMap1; }
         }
 
-        public void LoadMapState(string filename)
-        {
-            axMap1.LockWindow(tkLockMode.lmLock);
-            try
-            {
-                axMap1.LoadMapState(filename, null);
-                InitMap();
-            }
-            finally
-            {
-                axMap1.LockWindow(tkLockMode.lmUnlock);
-            }
-        }
+   
 
         private void InitMap()
         {
-            //axMap1.Tiles.SetProxy("127.0.0.1", 8888);
-            //axMap1.Tiles.SetProxyAuthentication("temp", "1234", "");
+          
             axMap1.GrabProjectionFromData = true;
             axMap1.CursorMode = tkCursorMode.cmZoomIn;
             axMap1.SendSelectBoxFinal = true;
@@ -68,204 +61,57 @@ namespace Monitor.Map
 
 		private void RegisterEventHandlers()
 		{
-			axMap1.ProjectionChanged += axMap1_ProjectionChanged;
 			axMap1.MouseMoveEvent += axMap1_MouseMoveEvent;
-			axMap1.PreviewKeyDown += axMap1_PreviewKeyDown;
-			axMap1.MouseUpEvent += axMap1_MouseUpEvent;
-			axMap1.SelectBoxFinal += axMap1_SelectBoxFinal;
-			axMap1.LayerProjectionIsEmpty += axMap1_LayerProjectionIsEmpty;
-			axMap1.ProjectionMismatch += axMap1_ProjectionMismatch;
-			axMap1.LayerReprojected += axMap1_LayerReprojected;
-			axMap1.LayerAdded += axMap1_LayerAdded;
-			axMap1.GridOpened += axMap1_GridOpened;
-			axMap1.LayerRemoved += axMap1_LayerRemoved;
-			axMap1.BackgroundLoadingStarted += axMap1_BackgroundLoadingStarted;
-			axMap1.BackgroundLoadingFinished += axMap1_BackgroundLoadingFinished;
 		}
 
 
-		void axMap1_MouseUpEvent(object sender, _DMapEvents_MouseUpEvent e)
-		{
-			if(e.button == 2)
-			{
-				if(axMap1.CursorMode == tkCursorMode.cmIdentify)
-				{
-				//	_identifierContextMenu.Menu.Show(axMap1, e.x, e.y);
-				}
-				else if(axMap1.CursorMode == tkCursorMode.cmMeasure)
-				{
-					contextMenuStrip1.Show(axMap1, e.x, e.y);
-				}
-			}
-		}
 
-
-		void axMap1_GridOpened(object sender, _DMapEvents_GridOpenedEvent e)
-        {
-            Debug.Print("Grid is opened: " + e.gridFilename);
-            Debug.Print("Using proxy: " + e.isUsingProxy);
-            Debug.Print("BandIndex: " + e.bandIndex);
-        }
-
-        void axMap1_BackgroundLoadingFinished(object sender, _DMapEvents_BackgroundLoadingFinishedEvent e)
-        {
-            Debug.Print("Loading finished: {0}; TaskId: {1}; LayerHandle: {2} Features: {3}; Loaded: {4}", 
-            DateTime.Now.TimeOfDay.ToString(), e.taskId, e.layerHandle, e.numFeatures, e.numLoaded);
-        }
-
-        void axMap1_BackgroundLoadingStarted(object sender, _DMapEvents_BackgroundLoadingStartedEvent e)
-        {
-            Debug.Print("Loading started: {0}; TaskId: {1}; LayerHandle: {2}", DateTime.Now.TimeOfDay.ToString(), e.taskId, e.layerHandle);
-        }
-
-        void axMap1_LayerRemoved(object sender, _DMapEvents_LayerRemovedEvent e)
-        {
-            Debug.Print("Layer removed.");
-        }
-
-        void axMap1_LayerAdded(object sender, _DMapEvents_LayerAddedEvent e)
-        {
-            Debug.Print("Layer added.");
-        }
-
-
-
-        void axMap1_LayerReprojected(object sender, _DMapEvents_LayerReprojectedEvent e)
-        {
-            if (!e.success)
-            {
-                string filename = axMap1.get_LayerFilename(e.layerHandle);
-             //   MessageHelper.Warn("Failed to reproject the layer: " + filename);
-            }
-            else
-            {
-                Debug.WriteLine("Layer reprojected:" + e.success);    
-            }
-        }
-
-        void axMap1_ProjectionMismatch(object sender, _DMapEvents_ProjectionMismatchEvent e)
-        {
-            var sf = axMap1.get_Shapefile(e.layerHandle);
-            if (sf != null)
-            {
-                e.reproject = tkMwBoolean.blnTrue;
-                e.cancelAdding = tkMwBoolean.blnFalse;
-            }
-            else
-            {
-                string filename = axMap1.get_LayerFilename(e.layerHandle);
-            //    MessageHelper.Info("Layer projection doesn't match the projection of the map: " + filename);
-            }
-        }
-
-        void axMap1_LayerProjectionIsEmpty(object sender, _DMapEvents_LayerProjectionIsEmptyEvent e)
-        {
-            Debug.Print("Layer without projection");
-        }
-
-        void axMap1_SelectBoxFinal(object sender, _DMapEvents_SelectBoxFinalEvent e)
-        {
-            if (axMap1.CursorMode == tkCursorMode.cmSelection)
-            {
-            //    MessageHelper.Info("No shapefile layer is selected.");
-            }
-        }
-
-        //void axMap1_ShapeHighlighted(object sender, _DMapEvents_ShapeHighlightedEvent e)
-        //{
-        //    if (Map.CursorMode == tkCursorMode.cmIdentify && AppSettings.Instance.ShowTooltip)
-        //    {
-        //        string s = Map.GetAttributes(e.layerHandle, e.shapeIndex);
-        //        toolTip1.SetToolTip(Map, s);
-        //        Application.DoEvents();
-        //    }
-        //}
-
-        //void axMap1_MouseUpEvent(object sender, _DMapEvents_MouseUpEvent e)
-        //{
-        //    if (e.button == 2)
-        //    {
-        //        if (axMap1.CursorMode == tkCursorMode.cmIdentify)
-        //        {
-        //            _identifierContextMenu.Menu.Show(axMap1, e.x, e.y);
-        //        }
-        //        else if (axMap1.CursorMode == tkCursorMode.cmMeasure)
-        //        {
-        //            contextMenuStrip1.Show(axMap1, e.x, e.y);
-        //        }
-        //    }
-        //}
-
-        //void axMap1_ShapeIdentified(object sender, _DMapEvents_ShapeIdentifiedEvent e)
-        //{
-        //    var sf = axMap1.get_Shapefile(e.layerHandle);
-        //    if (sf != null)
-        //    {
-        //        using (var form = new AttributesForm(sf, e.shapeIndex, e.layerHandle))
-        //        {
-        //            form.ShowDialog(MainForm.Instance);
-        //        }
-        //    }
-        //}
-
-        //void axMap1_SelectionChanged(object sender, _DMapEvents_SelectionChangedEvent e)
-        //{
-        //    App.RefreshUI();
-        //}
-
-        private void axMap1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-             switch (e.KeyCode)
-             {
-                 case Keys.Left:
-                 case Keys.Right:
-                 case Keys.Up:
-                 case Keys.Down:
-                     e.IsInputKey = true;
-                     return;
-             }
-        }
-
-        private void axMap1_ProjectionChanged(object sender, System.EventArgs e)
-        {
-            var gp = axMap1.GeoProjection;
-            lblProjection.Text = gp.IsEmpty ? "No projection" : "Projection: " + gp.ExportToProj4();
-        }
 
         private void axMap1_MouseMoveEvent(object sender, _DMapEvents_MouseMoveEvent e)
         {
-            if (!axMap1.Focused)
-                axMap1.Focus();
-        }
+			//if (!axMap1.Focused)
+			//    axMap1.Focus();
 
-        public void HideTooltip()
-        {
-            toolTip1.SetToolTip(Map, "");
-        }
+			#region 显示ais数据标签详情
+			Shapefile sf = Map.get_Shapefile(MapForm.MapFormAttri.AISHandle);
+		//	sf.Close();
+		
+			if(sf != null)
+			{
+				Labels labels = sf.Labels;
+				labels.FontSize = 15;
+				labels.FontBold = true;
+				labels.FrameVisible = true;
+				labels.FrameType = tkLabelFrameType.lfRectangle;
+				labels.AutoOffset = false;
+				labels.OffsetX = 40;
 
-		/// <summary>
-		/// The file dropped of the map control
-		/// </summary>
-		/// <param name="sender">
-		/// The sender.
-		/// </param>
-		/// <param name="e">
-		/// The e.
-		/// </param>
-		//private void AxMap1FileDropped(object sender, _DMapEvents_FileDroppedEvent e)
-		//{
-		//    Helpers.LayerHelper.AddLayer(this.axMap1.FileManager.Open(e.filename));
-		//}
+				LabelCategory cat = labels.AddCategory("Red");
+				cat.FontColor = 255;
 
-		//private void mnuMeasuringOptions_Click(object sender, EventArgs e)
-		//{
-		//    using (var form = new MeasuringForm(Map.Measuring))
-		//    {
-		//        if (form.ShowDialog(this) == DialogResult.OK)
-		//        {
-		//            Map.Redraw2(tkRedrawType.RedrawSkipAllLayers);
-		//        }
-		//    }
-		//}
+				double projX = 0.0;
+				double projY = 0.0;
+				Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+				object result = null;
+				var ext = new Extents();
+				ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
+				if(sf.SelectShapes(ext, 0.00005, SelectMode.INTERSECTION, ref result) && (labelFlag == 0))
+				{															 
+					AISDataStru aisPointData = MapAlgori.FindAisPoint(MainForm.MainFormAttri.ais, projX, projY);
+					string aisLabel = "x=" + aisPointData.longitude.ToString() + "      "  +
+						"y=" + aisPointData.latitude.ToString();
+					labels.AddLabel(aisLabel, projX, projY, 0.0, -1);
+					labelFlag = 1;
+				}
+				else
+				{
+					sf.Labels.Clear();
+					labelFlag = 0;
+				}
+				Map.Redraw();
+			}
+			#endregion
+		}
+	  
 	}
 }

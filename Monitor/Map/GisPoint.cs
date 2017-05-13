@@ -93,6 +93,8 @@ namespace Monitor.Map
                 i++;
             }
             reader.Close();
+			closeDB();
+			
         }
 
         /// <summary>
