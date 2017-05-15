@@ -13,12 +13,16 @@ namespace Monitor.Map
 	public  class MapDraw
 	{
 		private AxMap MapHandle;
-		private int AisHandle;
 
-		public MapDraw(AxMap map, int handle)
+
+		/// <summary>
+		/// 构造函数
+		/// </summary>
+		/// <param name="map"></param> 地图句柄
+		public MapDraw(AxMap map)
 		{
 			MapHandle = map;
-			AisHandle = handle; 
+			
 		}
 
 		public static void WriteLineFromData(LineData data)
@@ -115,59 +119,161 @@ namespace Monitor.Map
 		}
 
 
-		/// <summary>
-		/// 在地图上画三角点
-		/// </summary>
-		/// <param name="data"></param>data参数为ais数据
-		public int CreatePointShapefile(AISData data)
-		{
-			MapHandle.Projection = tkMapProjection.PROJECTION_NONE;
-			var sf = new Shapefile(); //创建一个新的shp文件
-			bool result = sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);  //初始化shp文件
-
-			Shape shp = new Shape(); //创建shp图层
-			shp.Create(ShpfileType.SHP_MULTIPOINT);
-			for(int i = 0; i < data.aisData.Length; i++)
-			{
-			
-
-				var pnt = new Point();
-				
-				pnt.x = data.aisData[i].longitude;
-				pnt.y = data.aisData[i].latitude;
-
-				
-				int index = 0;
-				shp.InsertPoint(pnt, ref index);
-			//	sf.EditInsertShape(shp, ref i);
-			}
-			sf.EditAddShape(shp);
-
-			var utils = new Utils();						
-			ShapefileCategory ct = sf.Categories.Add("0");
-			ct.DrawingOptions.PointSize = 10;
-			ct.DrawingOptions.FillColor = utils.ColorByName(tkMapColor.Red);
-			ct.DrawingOptions.SetDefaultPointSymbol(tkDefaultPointSymbol.dpsTriangleUp);
-			sf.set_ShapeCategory2(0,"0");
-
 		
-			int handle = MapHandle.AddLayer(sf, true);
-			MapHandle.SendMouseMove = true;
-			return handle;
+	
+
+	}
+
+	public class DrawLine
+	{
+		private static AxMap Map ;
+		public static Shapefile sf = new Shapefile();
+
+		public DrawLine()
+		{
+			Map = MapForm.MapFormAttri.Map;
+		}
+
+
+		public  void WriteLineFromData(LineData data)
+		{
+
+			for(int i = 0;i < data.x.Length - 1;i++)
+			{
+				LinePattern(data.x[i], data.y[i], data.x[i + 1], data.y[i + 1]);
+			}
+
+
 		}
 
 		/// <summary>
-		/// 在地图上加载ais数据
+		/// 根据坐标在地图上划线
 		/// </summary>
-		/// <param name="data"></param>ais数据
-		/// <returns></returns>
-		public int LoadAISData(AISData data)
+		/// <param name="Xstart"></param>
+		/// <param name="Ystart"></param>
+		/// <param name="Xend"></param>
+		/// <param name="Yend"></param>
+		public  void LinePattern(double Xstart, double Ystart, double Xend, double Yend)
 		{
-			Shapefile sf = MapHandle.get_Shapefile(AisHandle);
-			if(sf != null)
-				sf.Close();
-			int aisHandle = CreatePointShapefile(data);
-			return aisHandle;
+			var axMap1 = MapForm.MapFormAttri.Map;
+			axMap1.Projection = tkMapProjection.PROJECTION_NONE;
+
+			var sf = CreateLines(Xstart,Ystart,Xend,Yend);
+			axMap1.AddLayer(sf, true);
+
+			var utils = new Utils();
+
+			// railroad pattern
+			LinePattern pattern = new LinePattern();
+			pattern.AddLine(utils.ColorByName(tkMapColor.DarkBlue), 6.0f, tkDashStyle.dsSolid);
+			//	pattern.AddLine(utils.ColorByName(tkMapColor.White), 5.0f, tkDashStyle.dsSolid);
+
+			ShapefileCategory ct = sf.Categories.Add("Railroad");
+			ct.DrawingOptions.LinePattern = pattern;
+			ct.DrawingOptions.UseLinePattern = true;
+			sf.set_ShapeCategory(0, 0);
+		}
+
+
+		// <summary>
+		// This function creates a number of parallel polylines (segments)
+		// </summary>
+		public static Shapefile CreateLines(double Xstart, double Ystart, double Xend, double Yend)
+		{
+			Shapefile sf = new Shapefile();
+			sf.CreateNew("", ShpfileType.SHP_POLYLINE);
+
+			Shape shp = new Shape();
+			shp.Create(ShpfileType.SHP_POLYLINE);
+
+			Point pnt = new Point();
+			pnt.x = Xstart;
+			pnt.y = Ystart;
+			int index = shp.numPoints;
+			shp.InsertPoint(pnt, ref index);
+
+			pnt = new Point();
+			pnt.x = Xend;
+			pnt.y = Yend;
+			index = shp.numPoints;
+			shp.InsertPoint(pnt, ref index);
+
+			index = sf.NumShapes;
+			sf.EditInsertShape(shp, ref index);
+
+			return sf;
+		}
+
+
+
+	}
+
+	public class DrawPoint
+	{
+		private static AxMap Map ;
+		public static Shapefile sf = new Shapefile();
+
+		public int shapindex = -1;
+
+		static DrawPoint()
+		{
+			Map = MapForm.MapFormAttri.Map;
+			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
+		}	
+		
+					  
+		/// <summary>
+		/// 在地图上画点
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="pointSet"></param>
+		/// <returns></returns>
+		public int CreatPoint(Point[] data, PointSet pointSet)
+		{
+			Shape shp = new Shape(); //创建shp图层
+			shp.Create(ShpfileType.SHP_MULTIPOINT);
+			for(int i = 0;i < data.Length;i++)
+			{
+
+				var pnt = new Point();
+				pnt.x = data[i].x;
+				pnt.y = data[i].y;
+
+				int index = 0;
+				shp.InsertPoint(pnt, ref index);
+
+			}
+			sf.EditInsertShape(shp, ref shapindex);
+
+			ShapefileCategory ct = sf.Categories.Add(pointSet.categroyName);
+			var utils = new Utils();
+			ct.DrawingOptions.PointSize = pointSet.size;
+			ct.DrawingOptions.FillColor = utils.ColorByName(pointSet.color);
+			ct.DrawingOptions.SetDefaultPointSymbol(pointSet.shape);
+			sf.set_ShapeCategory2(shapindex, pointSet.categroyName);
+
+			int handle = Map.AddLayer(sf, true);
+			Map.SendMouseMove = true;
+			return handle;
+
+		}
+
+	}
+
+	public struct PointSet
+	{
+		public string categroyName;
+		public tkDefaultPointSymbol shape;
+		public  tkMapColor color;
+		public  float size;
+
+		public PointSet(string categroyName, tkDefaultPointSymbol shape, tkMapColor color, float size)
+		{
+			this.categroyName = categroyName;
+			this.shape = shape;
+			this.color = color;
+			this.size = size;
+
 		}
 
 	}

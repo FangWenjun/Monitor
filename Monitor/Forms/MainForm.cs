@@ -11,6 +11,7 @@ using Monitor.Classes;
 using WeifenLuo.WinFormsUI.Docking;
 using Monitor.Map;
 using Monitor.DataTransfer;
+using MapWinGIS;
 
 namespace Monitor
 {
@@ -21,7 +22,9 @@ namespace Monitor
         /// </summary>
         private AppDispatcher _dispatcher = new AppDispatcher();
 		private MapForm _mapForm = null;
-		public AISData ais = new AISData();
+		public AISData ais = null;
+		public DrawLine drawLine ;
+
 
 		/// <summary>
 		/// 主窗口句柄
@@ -90,7 +93,8 @@ namespace Monitor
 			GisPoint.connectToDB(App.dbname);
 			GisPoint.readData();
 			GisPoint.SortList();
-			MapDraw.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
+			drawLine = new DrawLine();
+			drawLine.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
 				App.m_PointList[10].X, App.m_PointList[10].Y);
 			#endregion
 
@@ -98,12 +102,11 @@ namespace Monitor
 			//1、获取数据库中数据
 			SqliteData sqlite = new SqliteData(App.dbname);
 			DataTable gisData = sqlite.readData("Point");
-			//2、转换成ais数据
-			ais = new AISData();
-			ais.IntoAisData(gisData);
+			//2、实例化AISData类
+			ais = new AISData(MapForm.MapFormAttri.Map, gisData);
 			//3、在地图上加载ais数据
-			MapDraw mapDraw = new MapDraw(MapForm.MapFormAttri.Map, MapForm.MapFormAttri.AISHandle);
-			MapForm.MapFormAttri.AISHandle = mapDraw.LoadAISData(ais);
+			PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
+			ais.LoadAISData(ais.aisData, pointSet);
 			#endregion
 
 		}

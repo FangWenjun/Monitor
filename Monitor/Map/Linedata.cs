@@ -12,3 +12,6 @@ namespace Monitor.Map
 		public double[] y;
 	}
 }
+
+
+

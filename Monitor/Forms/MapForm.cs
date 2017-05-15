@@ -73,9 +73,7 @@ namespace Monitor.Map
 			//    axMap1.Focus();
 
 			#region 显示ais数据标签详情
-			Shapefile sf = Map.get_Shapefile(MapForm.MapFormAttri.AISHandle);
-		//	sf.Close();
-		
+			Shapefile sf = DrawPoint.sf;
 			if(sf != null)
 			{
 				Labels labels = sf.Labels;
