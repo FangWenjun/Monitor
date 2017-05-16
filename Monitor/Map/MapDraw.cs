@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using MapWinGIS;
 using AxMapWinGIS;
 using System.Data;
+using System.IO;
+using Monitor.Help;
 
 namespace Monitor.Map
 {
@@ -119,8 +121,48 @@ namespace Monitor.Map
 		}
 
 
-		
-	
+
+		/// <summary>
+		/// 在地图上加载船只图片，listdata是船只位置的坐标信息，iconpath是图片的路径
+		/// </summary>
+		/// <param name="ListData"></param>
+		/// <param name="iconpath"></param>
+		public static void CreatePicture(List<GisPoint> ListData, string iconpath)
+		{
+			var Map = MapForm.MapFormAttri.Map;
+			var sf = new Shapefile(); //创建一个新的shp文件
+			bool result = sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);  //初始化shp文件
+
+			Shape shp = new Shape(); //创建shp图层
+			shp.Create(ShpfileType.SHP_MULTIPOINT);
+			for(int i = 0;i < ListData.Count;i++)
+			{
+				var pnt = new Point();
+				pnt.x = ListData[i].X;
+				pnt.y = ListData[i].Y;
+				//	pnt.Key = "fang";
+				int index = 0;
+				shp.InsertPoint(pnt, ref index);
+			}
+			sf.EditAddShape(shp);
+
+
+			Utils utils = new Utils();
+			ShapeDrawingOptions options = sf.DefaultDrawingOptions;
+			options.PointType = tkPointSymbolType.ptSymbolPicture;
+			Image img = new Image();
+			img.Open(iconpath);
+			options.Picture = img;
+			options.PointRotation = 45.0;
+			sf.CollisionMode = tkCollisionMode.AllowCollisions;
+			sf.Categories.ApplyExpressions();
+
+			Map.AddLayer(sf, true);
+		}
+
+
+
+
 
 	}
 
@@ -258,6 +300,36 @@ namespace Monitor.Map
 
 		}
 
+
+
+
+		public int AddPicture(Point data, string path)
+		{
+			Shape shp = new Shape(); //创建shp图层
+			shp.Create(ShpfileType.SHP_MULTIPOINT);
+			var pnt = new Point();
+			pnt.x = data.x;
+			pnt.y = data.y;
+			int index = 0;
+			shp.InsertPoint(pnt, ref index);
+			sf.EditInsertShape(shp, ref shapindex);
+
+			ShapefileCategory ct = sf.Categories.Add("0");
+			var utils = new Utils();
+			ct.DrawingOptions = sf.DefaultDrawingOptions;
+			ct.DrawingOptions.PointType = tkPointSymbolType.ptSymbolPicture;
+			Image img = new Image();
+			img.Open(path);
+			ct.DrawingOptions.Picture = img;
+			ct.DrawingOptions.PointRotation = 45.0;
+			sf.CollisionMode = tkCollisionMode.AllowCollisions;
+			sf.set_ShapeCategory2(shapindex, "0");
+
+			int handle = Map.AddLayer(sf, true);
+			return handle;
+
+		}
+		
 	}
 
 	public struct PointSet

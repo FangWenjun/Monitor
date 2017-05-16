@@ -77,6 +77,13 @@ namespace Monitor.Map
 		}
 
 
+		public void LoadImg(string path)
+		{
+			drawPoint.AddPicture(point[0], path);
+
+		}
+
+
 
 
 		/// <summary>
@@ -84,11 +91,11 @@ namespace Monitor.Map
 		/// </summary>
 		/// <param name="data"></param>ais数据
 		/// <returns></returns>
-		public void LoadAISData(AISDataStru[] data ,PointSet pointSet)
+		public void LoadAISData( PointSet pointSet)
 		{
-			Shapefile sf = map.get_Shapefile(AisHandle);
-			if(sf != null)
-				sf.Close();
+			//Shapefile sf = map.get_Shapefile(AisHandle);
+			//if(sf != null)
+			//	sf.Close();
 			AisHandle = drawPoint.CreatPoint(point, pointSet);
 			 
 		}

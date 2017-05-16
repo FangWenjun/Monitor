@@ -11,6 +11,8 @@ using Monitor.Classes;
 using WeifenLuo.WinFormsUI.Docking;
 using Monitor.Map;
 using Monitor.DataTransfer;
+using System.IO;
+using AxMapWinGIS;
 using MapWinGIS;
 
 namespace Monitor
@@ -24,6 +26,8 @@ namespace Monitor
 		private MapForm _mapForm = null;
 		public AISData ais = null;
 		public DrawLine drawLine ;
+		public DrawPoint drawPoint;
+		public MapDraw mapDraw;
 
 
 		/// <summary>
@@ -93,6 +97,8 @@ namespace Monitor
 			GisPoint.connectToDB(App.dbname);
 			GisPoint.readData();
 			GisPoint.SortList();
+			//DrawPoint.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
+			//MapDraw.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
 			drawLine = new DrawLine();
 			drawLine.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
 				App.m_PointList[10].X, App.m_PointList[10].Y);
@@ -106,7 +112,17 @@ namespace Monitor
 			ais = new AISData(MapForm.MapFormAttri.Map, gisData);
 			//3、在地图上加载ais数据
 			PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
-			ais.LoadAISData(ais.aisData, pointSet);
+			ais.LoadAISData(pointSet);
+			#endregion
+
+
+			#region
+			drawPoint = new DrawPoint();
+			var pnt = new MapWinGIS.Point();
+			pnt.x = 121.907567728461;
+			pnt.y = 30.8729913928844;
+			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
+			drawPoint.AddPicture(pnt, path);
 			#endregion
 
 		}
