@@ -26,17 +26,7 @@ namespace Monitor.Map
 			MapHandle = map;
 			
 		}
-
-		public static void WriteLineFromData(LineData data)
-		{
-			
-			for(int i=0; i<data.x.Length-1; i++)
-			{
-				LinePattern(data.x[i],data.y[i],data.x[i+1],data.y[i+1]);
-			}
-			
-
-		}
+	 
 
 		/// <summary>
 		/// 根据坐标在地图上划线
@@ -177,12 +167,12 @@ namespace Monitor.Map
 		}
 
 
-		public  void WriteLineFromData(LineData data)
+		public  void WriteLineFromData(List<LineParaSetStru> data)
 		{
 
-			for(int i = 0;i < data.x.Length - 1;i++)
+			for(int i = 0;i < data.Count; i++)
 			{
-				LinePattern(data.x[i], data.y[i], data.x[i + 1], data.y[i + 1]);
+				LinePattern(data[i].startPoint.x, data[i].startPoint.y, data[i].endPoint.x, data[i].endPoint.y, data[i].color);
 			}
 
 
@@ -195,7 +185,7 @@ namespace Monitor.Map
 		/// <param name="Ystart"></param>
 		/// <param name="Xend"></param>
 		/// <param name="Yend"></param>
-		public  void LinePattern(double Xstart, double Ystart, double Xend, double Yend)
+		public  void LinePattern(double Xstart, double Ystart, double Xend, double Yend, int color)
 		{
 			var axMap1 = MapForm.MapFormAttri.Map;
 			axMap1.Projection = tkMapProjection.PROJECTION_NONE;
@@ -207,7 +197,7 @@ namespace Monitor.Map
 
 			// railroad pattern
 			LinePattern pattern = new LinePattern();
-			pattern.AddLine(utils.ColorByName(tkMapColor.DarkBlue), 6.0f, tkDashStyle.dsSolid);
+			pattern.AddLine(utils.ColorByName((tkMapColor)(color)), 6.0f, tkDashStyle.dsSolid);
 			//	pattern.AddLine(utils.ColorByName(tkMapColor.White), 5.0f, tkDashStyle.dsSolid);
 
 			ShapefileCategory ct = sf.Categories.Add("Railroad");

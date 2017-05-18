@@ -89,6 +89,7 @@ namespace Monitor
 			#region	加载gis地图
 			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp" };
 			MapLayer.AddLayer(str);
+			//	MapLayer.AddSqliteLayer(MapForm.MapFormAttri.Map);
 			#endregion
 
 			//DataTable LineData = MySqlData.ReadData(GlobalVar.SqlConn,"Point");
@@ -101,7 +102,7 @@ namespace Monitor
 			//MapDraw.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
 			drawLine = new DrawLine();
 			drawLine.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
-				App.m_PointList[10].X, App.m_PointList[10].Y);
+				App.m_PointList[10].X, App.m_PointList[10].Y, -256);
 			#endregion
 
 			#region	  在gis地图中添加ais数据

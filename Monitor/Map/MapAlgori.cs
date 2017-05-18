@@ -32,6 +32,7 @@ namespace Monitor.Map
 
 		}
 
+
 		/// <summary>
 		/// 求一个double数组中的最小值的位置
 		/// </summary>

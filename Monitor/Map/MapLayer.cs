@@ -7,6 +7,7 @@ using MapWinGIS;
 using AxMapWinGIS;
 using Monitor.Classes;
 using Monitor.Help;
+using System.Diagnostics;
 
 namespace Monitor.Map
 {
@@ -74,5 +75,45 @@ namespace Monitor.Map
 				map.LockWindow(tkLockMode.lmUnlock);
 			}
 		}
+
+
+		public static void AddSqliteLayer(AxMap map)
+		{
+			string fn = @"d:\data2.sqlite";
+			var ds = new OgrDatasource();
+			if(!ds.Open(fn))
+			{
+				Debug.Print("Failed to establish connection: " + ds.GdalLastErrorMsg);
+			}
+			else
+			{
+				map.RemoveAllLayers();
+
+				// make sure it matches SRID of the layers (4326 in our case)
+				map.Projection = tkMapProjection.PROJECTION_WGS84;
+
+				for(int i = 0;i < ds.LayerCount;i++)
+				{
+					var layer = ds.GetLayer(i);
+					if(layer != null)
+					{
+						int handle = map.AddLayer(layer, true);
+						if(handle == -1)
+						{
+							Debug.WriteLine("Failed to add layer to the map: " + map.get_ErrorMsg(map.LastErrorCode));
+						}
+						else
+						{
+							Debug.WriteLine("Layer was added the map: " + layer.Name);
+						}
+					}
+				}
+				map.ZoomToMaxVisibleExtents();
+				ds.Close();
+				map.Redraw();
+			}
+
+		}
+		
 	}
 }

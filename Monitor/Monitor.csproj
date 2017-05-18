@@ -130,10 +130,11 @@
     </Compile>
     <Compile Include="Map\AISData.cs" />
     <Compile Include="Map\GisPoint.cs" />
-    <Compile Include="Map\Linedata.cs" />
     <Compile Include="Map\MapAlgori.cs" />
     <Compile Include="Map\MapDraw.cs" />
     <Compile Include="Map\MapLayer.cs" />
+    <Compile Include="Map\TempDataLoad.cs" />
+    <Compile Include="Map\TempHieraDisplay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
