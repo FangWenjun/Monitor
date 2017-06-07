@@ -81,50 +81,53 @@ namespace Monitor
 		{
 			
 			_mapForm = new MapForm();
+			_mapForm.Text = "GIS地图";
 			_mapForm.Show(dockPanel1, DockState.Document);
-		//	_mapForm.SelectionChanged += (s, e) => RefreshUI();
 			_mapForm.CloseButton = false;
+			_mapForm.UiInitAndInvoke();
 			_mapForm.Activate();
 
-			#region	加载gis地图
-			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp" };
-			MapLayer.AddLayer(str);
-			//	MapLayer.AddSqliteLayer(MapForm.MapFormAttri.Map);
-			#endregion
-
-			//DataTable LineData = MySqlData.ReadData(GlobalVar.SqlConn,"Point");
-
-			#region	 在地图上划线
-			GisPoint.connectToDB(App.dbname);
-			GisPoint.readData();
-			GisPoint.SortList();
-			//DrawPoint.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
-			//MapDraw.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
-			drawLine = new DrawLine();
-			drawLine.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
-				App.m_PointList[10].X, App.m_PointList[10].Y, -256);
-			#endregion
-
-			#region	  在gis地图中添加ais数据
-			//1、获取数据库中数据
-			SqliteData sqlite = new SqliteData(App.dbname);
-			DataTable gisData = sqlite.readData("Point");
-			//2、实例化AISData类
-			ais = new AISData(MapForm.MapFormAttri.Map, gisData);
-			//3、在地图上加载ais数据
-			PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
-			ais.LoadAISData(pointSet);
-			#endregion
 
 
-			#region
-			drawPoint = new DrawPoint();
-			var pnt = new MapWinGIS.Point();
-			pnt.x = 121.907567728461;
-			pnt.y = 30.8729913928844;
-			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
-			drawPoint.AddPicture(pnt, path);
-			#endregion
+			//#region	加载gis地图
+			//string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp" };
+			//MapLayer.AddLayer(str);
+			////	MapLayer.AddSqliteLayer(MapForm.MapFormAttri.Map);
+			//#endregion
+
+			////DataTable LineData = MySqlData.ReadData(GlobalVar.SqlConn,"Point");
+
+			//#region	 在地图上划线
+			//GisPoint.connectToDB(App.dbname);
+			//GisPoint.readData();
+			//GisPoint.SortList();
+			////DrawPoint.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
+			////MapDraw.CreatePicture(App.m_PointList, @"D:\光纤传感监测系统\Monitor\Monitor\data\ship3.png");
+			//drawLine = new DrawLine();
+			//drawLine.LinePattern(App.m_PointList[0].X, App.m_PointList[0].Y,
+			//	App.m_PointList[10].X, App.m_PointList[10].Y, -256);
+			//#endregion
+
+			//#region	  在gis地图中添加ais数据
+			////1、获取数据库中数据
+			//SqliteData sqlite = new SqliteData(App.dbname);
+			//DataTable gisData = sqlite.readData("Point");
+			////2、实例化AISData类
+			//ais = new AISData(MapForm.MapFormAttri.Map, gisData);
+			////3、在地图上加载ais数据
+			//PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
+			//ais.LoadAISData(pointSet);
+			//#endregion
+
+
+			//#region
+			//drawPoint = new DrawPoint();
+			//var pnt = new MapWinGIS.Point();
+			//pnt.x = 121.907567728461;
+			//pnt.y = 30.8729913928844;
+			//string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
+			//drawPoint.AddPicture(pnt, path);
+			//#endregion
 
 		}
 

@@ -36,6 +36,7 @@
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuMeasuringOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.timerCheck = new System.Windows.Forms.Timer(this.components);
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.axMap1)).BeginInit();
 			this.contextMenuStrip1.SuspendLayout();
@@ -69,7 +70,6 @@
 			this.axMap1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMap1.OcxState")));
 			this.axMap1.Size = new System.Drawing.Size(402, 243);
 			this.axMap1.TabIndex = 3;
-			
 			// 
 			// contextMenuStrip1
 			// 
@@ -88,6 +88,10 @@
 			// 
 			this.toolTip1.AutomaticDelay = 300;
 			this.toolTip1.ShowAlways = true;
+			// 
+			// timerCheck
+			// 
+			this.timerCheck.Enabled = true;
 			// 
 			// MapForm
 			// 
@@ -116,5 +120,6 @@
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem mnuMeasuringOptions;
 		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.Timer timerCheck;
 	}
 }

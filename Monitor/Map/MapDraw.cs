@@ -9,6 +9,7 @@ using AxMapWinGIS;
 using System.Data;
 using System.IO;
 using Monitor.Help;
+using Monitor.Core;
 
 namespace Monitor.Map
 {
@@ -156,14 +157,47 @@ namespace Monitor.Map
 
 	}
 
-	public class DrawLine
+	public class DrawLine: IDrawLine
 	{
-		private static AxMap Map ;
-		public static Shapefile sf = new Shapefile();
+		private  AxMap map ;
+		public  Shapefile sf = new Shapefile();
 
-		public DrawLine()
+		public AxMap Map
 		{
-			Map = MapForm.MapFormAttri.Map;
+			get
+			{
+				return map;
+			}
+
+			set
+			{
+				map = value;
+			}
+		}
+
+		public Shapefile Shp
+		{
+			get
+			{
+				return sf;
+			}
+
+			set
+			{
+				sf = value;
+			}
+		}
+
+		public DrawLine(AxMap map)
+		{
+			this.map = map;
+		} 
+
+		public DrawLine(AxMap map, Shapefile sf)
+		{
+			this.map = map;
+			this.sf = sf;
+
 		}
 
 
@@ -172,7 +206,7 @@ namespace Monitor.Map
 
 			for(int i = 0;i < data.Count; i++)
 			{
-				LinePattern(data[i].startPoint.x, data[i].startPoint.y, data[i].endPoint.x, data[i].endPoint.y, data[i].color);
+				WriteLine(data[i].startPoint.x, data[i].startPoint.y, data[i].endPoint.x, data[i].endPoint.y, data[i].color);
 			}
 
 
@@ -185,13 +219,13 @@ namespace Monitor.Map
 		/// <param name="Ystart"></param>
 		/// <param name="Xend"></param>
 		/// <param name="Yend"></param>
-		public  void LinePattern(double Xstart, double Ystart, double Xend, double Yend, int color)
+		public int WriteLine(double Xstart, double Ystart, double Xend, double Yend, int color)
 		{
-			var axMap1 = MapForm.MapFormAttri.Map;
+			var axMap1 = map;
 			axMap1.Projection = tkMapProjection.PROJECTION_NONE;
 
 			var sf = CreateLines(Xstart,Ystart,Xend,Yend);
-			axMap1.AddLayer(sf, true);
+			int handle = axMap1.AddLayer(sf, true);
 
 			var utils = new Utils();
 
@@ -204,6 +238,8 @@ namespace Monitor.Map
 			ct.DrawingOptions.LinePattern = pattern;
 			ct.DrawingOptions.UseLinePattern = true;
 			sf.set_ShapeCategory(0, 0);
+
+			return handle; 
 		}
 
 
@@ -240,19 +276,55 @@ namespace Monitor.Map
 
 	}
 
-	public class DrawPoint
+	public class DrawPoint: IDrawPoint
 	{
-		private static AxMap Map ;
-		public static Shapefile sf = new Shapefile();
+		private  AxMap map;
+		//	public static Shapefile sf = new Shapefile();
+		public Shapefile sf ;
 
 		public int shapindex = -1;
 
-		static DrawPoint()
+
+
+		public AxMap Map
 		{
-			Map = MapForm.MapFormAttri.Map;
-			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
-		}	
+			get
+			{
+				return map;
+			}
+
+			set
+			{
+				map = value;
+			}
+		}
+
+		public Shapefile Shp
+		{
+			get
+			{
+				return sf;
+			}
+
+			set
+			{
+				sf = value;
+			}
+		}
+
+		public DrawPoint(AxMap map)
+		{
+			this.map = map;
+			sf = new Shapefile();
 		
+		}
+
+		public DrawPoint(AxMap map, Shapefile sf)
+		{
+			this.map = map;
+			this.sf = sf;
+		}
+
 					  
 		/// <summary>
 		/// 在地图上画点
@@ -262,6 +334,7 @@ namespace Monitor.Map
 		/// <returns></returns>
 		public int CreatPoint(Point[] data, PointSet pointSet)
 		{
+			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
 			Shape shp = new Shape(); //创建shp图层
 			shp.Create(ShpfileType.SHP_MULTIPOINT);
 			for(int i = 0;i < data.Length;i++)
@@ -295,6 +368,7 @@ namespace Monitor.Map
 
 		public int AddPicture(Point data, string path)
 		{
+			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
 			Shape shp = new Shape(); //创建shp图层
 			shp.Create(ShpfileType.SHP_MULTIPOINT);
 			var pnt = new Point();

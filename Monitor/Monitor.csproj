@@ -103,6 +103,7 @@
     <Compile Include="Classes\gbStructType.cs" />
     <Compile Include="Classes\GetDataFormSql.cs" />
     <Compile Include="Classes\GetDataFromCSV.cs" />
+    <Compile Include="Core\IMap.cs" />
     <Compile Include="DataTransfer\SqliteData.cs" />
     <Compile Include="GlobalVar.cs" />
     <Compile Include="Classes\Invoke.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Map\MapAlgori.cs" />
     <Compile Include="Map\MapDraw.cs" />
     <Compile Include="Map\MapLayer.cs" />
+    <Compile Include="Map\Operation.cs" />
     <Compile Include="Map\TempDataLoad.cs" />
     <Compile Include="Map\TempHieraDisplay.cs" />
     <Compile Include="Program.cs" />

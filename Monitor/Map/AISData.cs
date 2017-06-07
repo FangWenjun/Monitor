@@ -22,6 +22,7 @@ namespace Monitor.Map
 		public int AisHandle = -1;
 		//public MapDraw mapDraw = null;
 		public DrawPoint drawPoint = null;
+	
 
 
 		
@@ -35,7 +36,7 @@ namespace Monitor.Map
 			this.map = map;
 			IntoAisData(table);
 			IntoPointData();
-			drawPoint = new DrawPoint();
+			drawPoint = new DrawPoint(map);
 
 		}
 
@@ -125,7 +126,7 @@ namespace Monitor.Map
 		{
 			this.map = map;
 			aisPointTrail = trail;
-			drawPoint = new DrawPoint();
+			drawPoint = new DrawPoint(map);
 		}
 
 		private void IntoPointData()

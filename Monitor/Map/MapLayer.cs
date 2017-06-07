@@ -8,13 +8,14 @@ using AxMapWinGIS;
 using Monitor.Classes;
 using Monitor.Help;
 using System.Diagnostics;
+using Monitor.Core;
 
 namespace Monitor.Map
 {
-	public static class MapLayer
+	public class MapLayer: IAddLayer
 	{
 
-		private static int Add(AxMap map, object layer, bool Visible)
+		private int Add(AxMap map, object layer, bool Visible)
 		{
 			if(layer == null) return -1;
 			if(map == null)
@@ -42,9 +43,9 @@ namespace Monitor.Map
 		/// 在gis中添加layer,其中layerroute是存.shp文件的路径
 		/// </summary>
 		/// <param name="LayerRoute"></param>
-		public static void AddLayer(string[] LayerRoute)
+		public static void AddLayerSta(AxMap map, string[] LayerRoute)
 		{
-			var map = MapForm.MapFormAttri.Map;
+		
 			map.LockWindow(tkLockMode.lmLock);
 
 			string layerName = "";
@@ -62,7 +63,7 @@ namespace Monitor.Map
 					}
 					else
 					{
-						Add(map, layer, true);
+					//	MapLayer.Add(map, layer, true);
 					}
 				}
 			}
@@ -114,6 +115,41 @@ namespace Monitor.Map
 			}
 
 		}
-		
+
+		public int AddLayer(AxMap Map, string[] LayerRoute)
+		{
+			int layerHandle= -1;
+			var map = Map;
+			map.LockWindow(tkLockMode.lmLock);
+
+			string layerName = "";
+			try
+			{
+				var fm = new FileManager();
+				foreach(var name in LayerRoute)
+				{
+					layerName = name;
+					var layer = fm.Open(name);
+					if(layer == null)
+					{
+						string msg = string.Format("Failed to open datasource: {0} \n {1}", name, fm.ErrorMsg[fm.LastErrorCode]);
+						MessageHelper.Warn(msg);
+					}
+					else
+					{
+						layerHandle = Add(map, layer, true);
+					}
+				}
+			}
+			catch
+			{
+				MessageHelper.Warn("There was a problem opening layer: " + layerName);
+			}
+			finally
+			{
+				map.LockWindow(tkLockMode.lmUnlock);
+			}
+			return layerHandle;
+		}
 	}
 }
