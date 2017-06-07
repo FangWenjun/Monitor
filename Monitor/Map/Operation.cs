@@ -10,7 +10,7 @@ namespace Monitor.Map
 {
 	public class Operation
 	{
-		public void AddLabel(AISData ais, Labels labels, double projX, double projY)
+		public static void AddLabel(AISData ais, Labels labels, double projX, double projY)
 		{
 			AISDataStru aisPointData = MapAlgori.FindAisPoint(ais, projX, projY);
 			string aisLabel = "x=" + aisPointData.longitude.ToString() + "      "  +
@@ -18,6 +18,15 @@ namespace Monitor.Map
 			labels.AddLabel(aisLabel, projX, projY, 0.0, -1);
 
 		}
+
+		public static void AddLabel(Labels labels, double projX, double projY)
+		{
+			string aisLabel = "图片label";
+			labels.AddLabel(aisLabel, projX, projY, 0.0, -1);
+
+		}
+
+
 
 	}
 }

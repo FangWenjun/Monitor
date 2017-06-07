@@ -35,4 +35,6 @@ namespace Monitor.Core
 
 
 	public delegate void MouseMoveOperator(AISData ais, Labels labels, double projX, double projY);
+
+	public delegate void MouseDownOperator(Labels labels, double projX, double proj);
 }
