@@ -11,6 +11,7 @@ using System.Data;
 using Monitor.Map;
 using Monitor.Core;
 using System.IO;
+using File;
 
 namespace Monitor.Map
 {
@@ -19,6 +20,7 @@ namespace Monitor.Map
     {
 
 		private static MapForm _mapform = null;
+
 
 		//用于判断是否已经显示label
 		private int labelFlag_MouseMove;
@@ -61,7 +63,18 @@ namespace Monitor.Map
         {
             InitializeComponent();
 			_mapform = this;
-        }
+
+			//File控件动态加载
+			File.File m_FileControl = new File.File(axMap1);
+			this.Controls.Add(m_FileControl);
+			m_FileControl.Location = new System.Drawing.Point(60, 10);
+			m_FileControl.Size = new System.Drawing.Size(119, 50);
+			//		m_FileControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
+			m_FileControl.Dock = DockStyle.None;
+			m_FileControl.BringToFront();
+
+
+		}
 
         public AxMap Map
         {
@@ -70,6 +83,7 @@ namespace Monitor.Map
 
 		public void UiInitAndInvoke()
 		{
+
 			MapInit();
 			RegisterEventHandlers();
 			timerCheck.Tick += new EventHandler(checkTimer_Tick);
@@ -81,7 +95,7 @@ namespace Monitor.Map
 		private void MapInit()
         {
             axMap1.GrabProjectionFromData = true;
-            axMap1.CursorMode = tkCursorMode.cmNone;
+          //  axMap1.CursorMode = tkCursorMode.cmNone;
             axMap1.SendSelectBoxFinal = true;
             axMap1.SendMouseDown = true;
             axMap1.SendMouseUp = true;
@@ -244,6 +258,16 @@ namespace Monitor.Map
 
 		}
 
+		private void axMap1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		{
+			if(e.KeyCode == Keys.Q)
+			{
+		
+					axMap1.CursorMode = tkCursorMode.cmNone;
+				
 
+			}
+
+		}
 	}
 }

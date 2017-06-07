@@ -70,6 +70,7 @@
 			this.axMap1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axMap1.OcxState")));
 			this.axMap1.Size = new System.Drawing.Size(402, 243);
 			this.axMap1.TabIndex = 3;
+			this.axMap1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.axMap1_PreviewKeyDown);
 			// 
 			// contextMenuStrip1
 			// 
