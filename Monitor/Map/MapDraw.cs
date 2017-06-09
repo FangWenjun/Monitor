@@ -222,8 +222,6 @@ namespace Monitor.Map
 		public int WriteLine(double Xstart, double Ystart, double Xend, double Yend, int color)
 		{
 			var axMap1 = map;
-			axMap1.Projection = tkMapProjection.PROJECTION_NONE;
-
 			var sf = CreateLines(Xstart,Ystart,Xend,Yend);
 			int handle = axMap1.AddLayer(sf, true);
 

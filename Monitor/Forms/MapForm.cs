@@ -172,7 +172,7 @@ namespace Monitor.Map
 			drawPoint = new DrawPoint(MapForm.MapFormAttri.Map);
 			var pnt = new MapWinGIS.Point();
 			mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
-			pnt.x = 121.907567728461;
+			pnt.x = 121.902567181871;
 			pnt.y = 30.8729913928844;
 			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
 			drawPoint.AddPicture(pnt, path);
@@ -208,7 +208,7 @@ namespace Monitor.Map
 				object result = null;
 				var ext = new Extents();
 				ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
-				if(sf.SelectShapes(ext, 0.00005, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
+				if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
 				{
 					mouseMoveOperate(MapForm.MapFormAttri.ais, labels, projX, projY);	
 					labelFlag_MouseMove = 1;
@@ -247,8 +247,8 @@ namespace Monitor.Map
 				Map.PixelToProj(e.x, e.y, ref projX, ref projY);
 				object result = null;
 				var ext = new Extents();
-				ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
-				if(sf.SelectShapes(ext, 0.00005, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+				ext.SetBounds(projX-0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
+				if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
 				{
 					mouseDownOperate(labels, projX, projY);
 					labelFlag_MouseDown = 1;
