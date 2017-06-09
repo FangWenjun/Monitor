@@ -83,37 +83,12 @@ namespace File.Classes
                     //LayerHelper.RemoveLayer();
                     return true;
                 case AppCommand.ZoomToLayer:
-                    //LayerHelper.ZoomToLayer();
+                    LayerHelper.ZoomToLayer();
                     return true;
                 case AppCommand.CreateLayer:
                     //Editor.RunCommand(EditorCommand.CreateLayer);
                     return true;
-                case AppCommand.LoadData:
-                    //加载温度数据
-                    GisPoint.connectToDB(Constants.dbname);
-                    GisPoint.readData();
-                    GisPoint.SortList();
-                    List<section> section = new List<section>();
-                    GisPoint.readSectionData(section);
-                    List<GisPoint>[] ListData = new List<GisPoint>[section.Count];
-                    //初始化list<GisPoint>类型数组
-                    for (int i = 0; i < section.Count; i++)
-                    {
-                        ListData[i] = new List<GisPoint> { };
-                    }
-                    foreach (var item in Constants.m_PointList)
-                    {
-                        for (int i = 0; i < section.Count; i++)
-                        {
-                            if ((item.TEMP >= section[i].section_begin) && (item.TEMP < section[i].section_end))
-                            {
-                                ListData[i].Add(item);
-                            }
-                        }
-
-                    }
-                    LayerHelper.CreatePointShapefile(App.Map, ListData, section.Count);
-                    return true;
+           
             }
             return false;
         }
@@ -146,6 +121,7 @@ namespace File.Classes
                     return SetMapCursor(tkCursorMode.cmSelection);
                 case AppCommand.ZoomIn:
                     return SetMapCursor(tkCursorMode.cmZoomIn);
+
                 case AppCommand.ZoomOut:
                     return SetMapCursor(tkCursorMode.cmZoomOut);
                 case AppCommand.ZoomToSelected:
@@ -154,8 +130,8 @@ namespace File.Classes
                 case AppCommand.ClearSelection:
                    // LayerHelper.ClearSelection();
                     break;
-                case AppCommand.ZoomMax:
-
+                case AppCommand.Click:
+					LayerHelper.MouseClickMode();
                     break;
                 case AppCommand.None:
                     return true;

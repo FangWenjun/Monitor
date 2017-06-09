@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using MapWinGIS;
 using AxMapWinGIS;
 using File;
+using Monitor.Map;
 
 namespace File.Classes
 {
@@ -92,7 +93,7 @@ namespace File.Classes
         public static void ZoomToLayer()
         {
           //  int handle = App.Legend.SelectedLayer;
-           // App.Map.ZoomToLayer(handle);
+          //  App.Map.ZoomToLayer(handle);
         }
 
         public static void ZoomToSelected()
@@ -184,5 +185,12 @@ namespace File.Classes
 			Map.AddLayer(sf, true);
             Map.SendMouseMove = true;
         }
+
+		public static void MouseClickMode()
+		{
+			MapForm.MapFormAttri.Map.CursorMode = tkCursorMode.cmNone;
+			MapForm.MapFormAttri.Cursor = Cursors.Default;
+			
+		}
     }
 }

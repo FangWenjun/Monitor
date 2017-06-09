@@ -116,6 +116,12 @@ namespace Monitor.Map
 
 		}
 
+		/// <summary>
+		/// 在地图上添加图层
+		/// </summary>
+		/// <param name="Map"></param>
+		/// <param name="LayerRoute"></param>
+		/// <returns>返回图层句柄</returns>
 		public int AddLayer(AxMap Map, string[] LayerRoute)
 		{
 			int layerHandle= -1;

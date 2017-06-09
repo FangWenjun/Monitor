@@ -33,6 +33,7 @@
 			this.toolZoomOut = new System.Windows.Forms.ToolStripButton();
 			this.toolZoomToLayer = new System.Windows.Forms.ToolStripButton();
 			this.toolPan = new System.Windows.Forms.ToolStripButton();
+			this.toolClick = new System.Windows.Forms.ToolStripButton();
 			this._toolStripLayer.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -44,10 +45,11 @@
             this.toolZoomIn,
             this.toolZoomOut,
             this.toolZoomToLayer,
-            this.toolPan});
+            this.toolPan,
+            this.toolClick});
 			this._toolStripLayer.Location = new System.Drawing.Point(0, 0);
 			this._toolStripLayer.Name = "_toolStripLayer";
-			this._toolStripLayer.Size = new System.Drawing.Size(119, 50);
+			this._toolStripLayer.Size = new System.Drawing.Size(147, 50);
 			this._toolStripLayer.TabIndex = 0;
 			// 
 			// toolZoomIn
@@ -74,13 +76,20 @@
 			this.toolPan.Name = "toolPan";
 			this.toolPan.Size = new System.Drawing.Size(23, 47);
 			// 
+			// toolClick
+			// 
+			this.toolClick.Image = global::Monitor.Properties.Resources.click;
+			this.toolClick.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolClick.Name = "toolClick";
+			this.toolClick.Size = new System.Drawing.Size(23, 47);
+			// 
 			// File
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._toolStripLayer);
 			this.Name = "File";
-			this.Size = new System.Drawing.Size(109, 50);
+			this.Size = new System.Drawing.Size(147, 50);
 			this._toolStripLayer.ResumeLayout(false);
 			this._toolStripLayer.PerformLayout();
 			this.ResumeLayout(false);
@@ -93,6 +102,6 @@
         private System.Windows.Forms.ToolStripButton toolZoomToLayer;
         private System.Windows.Forms.ToolStripButton toolPan;
         private System.Windows.Forms.ToolStrip _toolStripLayer;
-
-    }
+		private System.Windows.Forms.ToolStripButton toolClick;
+	}
 }

@@ -16,7 +16,7 @@ namespace File.Classes
 
         public static AxMap Map			   
         {
-            get { return File.Instance.FileMapControl; }
+            get { return File.Instance.FileMap; }
         }
 
         public static Project Project

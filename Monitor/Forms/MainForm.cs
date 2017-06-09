@@ -71,7 +71,7 @@ namespace Monitor
         {
 			this.InitDockLayout();
             this.InitMenus();//1、初始化主窗口中的所有按钮
-            this.InitUdp();
+         //   this.InitUdp();
      
 
      

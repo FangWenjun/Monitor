@@ -17,6 +17,8 @@ namespace Monitor
 		//sqlite数据库路径
 		public static string dbname = "Data Source=" + new DirectoryInfo("../../../../").FullName + 
 			"Monitor\\Monitor\\data\\data.db";//sqlite数据库路径
+
+
 		
 	
 	}

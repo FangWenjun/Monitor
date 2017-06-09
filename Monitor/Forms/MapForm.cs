@@ -20,6 +20,7 @@ namespace Monitor.Map
     {
 
 		private static MapForm _mapform = null;
+		private  File.File  m_FileControl = null;
 
 
 		//用于判断是否已经显示label
@@ -51,6 +52,11 @@ namespace Monitor.Map
 			get { return _mapform; }
 		}
 
+		public File.File FileControl
+		{
+			get { return m_FileControl; }
+		}
+
 		public string[] MapPath
 		{
 			set
@@ -65,10 +71,10 @@ namespace Monitor.Map
 			_mapform = this;
 
 			//File控件动态加载
-			File.File m_FileControl = new File.File(axMap1);
+			m_FileControl = new File.File();
 			this.Controls.Add(m_FileControl);
 			m_FileControl.Location = new System.Drawing.Point(60, 10);
-			m_FileControl.Size = new System.Drawing.Size(119, 50);
+			m_FileControl.Size = new System.Drawing.Size(147, 50);
 			//		m_FileControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
 			m_FileControl.Dock = DockStyle.None;
 			m_FileControl.BringToFront();
@@ -269,5 +275,7 @@ namespace Monitor.Map
 			}
 
 		}
+
+	
 	}
 }

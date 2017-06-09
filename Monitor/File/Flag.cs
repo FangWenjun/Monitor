@@ -36,7 +36,8 @@ namespace File.Classes
         AddDatabase = 25,
         Snapshot = 26,
         ZoomMax = 27,
-        LoadData = 28
+        LoadData = 28,
+		Click = 29
     }
 
     public enum FileType
