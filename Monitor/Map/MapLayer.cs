@@ -30,7 +30,7 @@ namespace Monitor.Map
 				return MapLayerHandle;
 			}
 
-			MapWinGIS.Shapefile sf = (layer as MapWinGIS.Shapefile);
+	//		MapWinGIS.Shapefile sf = (layer as MapWinGIS.Shapefile);
 
 			map.LockWindow(MapWinGIS.tkLockMode.lmUnlock);
 

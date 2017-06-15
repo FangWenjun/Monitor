@@ -111,18 +111,18 @@ namespace File.Classes
                 ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
                 if (sf.SelectShapes(ext, 0.00005, SelectMode.INTERSECTION, ref result) && (p == 0))
                 {
-                    string temp = GisPoint.readOneData(projX, projY);
-                    string tempx = temp + "℃";
-                    if(Convert.ToDouble(temp)>=50)
-                    {
-                        labels.AddLabel(tempx, projX, projY, 0.0, 0); 
-                    }
-                    else
-                    {
-                        labels.AddLabel(tempx, projX, projY, 0.0, -1); 
-                    }
+                    //string temp = GisPoint.readOneData(projX, projY);
+                    //string tempx = temp + "℃";
+                    //if(Convert.ToDouble(temp)>=50)
+                    //{
+                    //    labels.AddLabel(tempx, projX, projY, 0.0, 0); 
+                    //}
+                    //else
+                    //{
+                    //    labels.AddLabel(tempx, projX, projY, 0.0, -1); 
+                    //}
                     
-                    p = 1;
+                    //p = 1;
 
                 }
                 else

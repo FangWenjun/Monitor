@@ -33,7 +33,7 @@ namespace Monitor.Map
 		//定时器计时Flag
 		private int  mapCheck = 0;
 
-		private string[] mapPath = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp" } ;
+		private string[] mapPath = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp", @"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" } ;
 
 		public IAddLayer mapLayer;
 		public IDrawLine drawLine ;
@@ -78,8 +78,6 @@ namespace Monitor.Map
 			//		m_FileControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
 			m_FileControl.Dock = DockStyle.None;
 			m_FileControl.BringToFront();
-
-
 		}
 
         public AxMap Map
@@ -92,8 +90,8 @@ namespace Monitor.Map
 
 			MapInit();
 			RegisterEventHandlers();
-			timerCheck.Tick += new EventHandler(checkTimer_Tick);
-			timerCheck.Start();
+			//timerCheck.Tick += new EventHandler(checkTimer_Tick);
+			//timerCheck.Start();
 		}
 
 
@@ -126,13 +124,13 @@ namespace Monitor.Map
 
 		private void checkTimer_Tick(object sender, EventArgs e)
 		{
-			mapCheck++;
+			//mapCheck++;
 			
-			if(10 ==  mapCheck)
-			{
-				startWork();
-				Debug.Write("null, Start Check Map\n");
-			}
+			//if(10 ==  mapCheck)
+			//{
+			//	startWork();
+			//	Debug.Write("null, Start Check Map\n");
+			//}
 		
 		}
 
