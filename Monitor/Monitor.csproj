@@ -101,11 +101,12 @@
     <Compile Include="Classes\CommandDispatcher.cs" />
     <Compile Include="Classes\gbStructType.cs" />
     <Compile Include="Classes\GetDataFromCSV.cs" />
+    <Compile Include="Map\ClassPoint.cs" />
     <Compile Include="Map\ColorEnum.cs" />
     <Compile Include="Map\Core\IMap.cs" />
     <Compile Include="DataTransfer\SqliteData.cs" />
     <Compile Include="Classes\Invoke.cs" />
-    <Compile Include="Help\MessageHelper.cs" />
+    <Compile Include="Map\MessageHelper.cs" />
     <Compile Include="Classes\SelectionChangedArgs.cs" />
     <Compile Include="Classes\UDPClient.cs" />
     <Compile Include="DataTransfer\MySqlData.cs" />
@@ -115,10 +116,10 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MapForm.cs">
+    <Compile Include="Map\MapForm\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MapForm.Designer.cs">
+    <Compile Include="Map\MapForm\MapForm.Designer.cs">
       <DependentUpon>MapForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Sign.cs">
@@ -136,28 +137,28 @@
     <Compile Include="Map\TempHieraDisplay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ToolControl\App.cs" />
-    <Compile Include="ToolControl\AppDispatcher.cs" />
-    <Compile Include="ToolControl\CommandDispatcher.cs" />
-    <Compile Include="ToolControl\Constants.cs" />
-    <Compile Include="ToolControl\FileHelper.cs" />
-    <Compile Include="ToolControl\Flag.cs" />
-    <Compile Include="ToolControl\GisPoint.cs" />
-    <Compile Include="ToolControl\LayerHelper.cs" />
-    <Compile Include="ToolControl\MapExt.cs" />
-    <Compile Include="ToolControl\MessageHelper.cs" />
-    <Compile Include="ToolControl\Project.cs" />
-    <Compile Include="ToolControl\ProjectBase.cs" />
-    <Compile Include="ToolControl\UserControl1.cs">
+    <Compile Include="Map\ToolControl\App.cs" />
+    <Compile Include="Map\ToolControl\AppDispatcher.cs" />
+    <Compile Include="Map\ToolControl\CommandDispatcher.cs" />
+    <Compile Include="Map\ToolControl\Constants.cs" />
+    <Compile Include="Map\ToolControl\FileHelper.cs" />
+    <Compile Include="Map\ToolControl\Flag.cs" />
+    <Compile Include="Map\ToolControl\GisPoint.cs" />
+    <Compile Include="Map\ToolControl\LayerHelper.cs" />
+    <Compile Include="Map\ToolControl\MapExt.cs" />
+    <Compile Include="Map\ToolControl\MessageHelper.cs" />
+    <Compile Include="Map\ToolControl\Project.cs" />
+    <Compile Include="Map\ToolControl\ProjectBase.cs" />
+    <Compile Include="Map\ToolControl\UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ToolControl\UserControl1.designer.cs">
+    <Compile Include="Map\ToolControl\UserControl1.designer.cs">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MapForm.resx">
+    <EmbeddedResource Include="Map\MapForm\MapForm.resx">
       <DependentUpon>MapForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Sign.resx">
@@ -168,7 +169,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ToolControl\UserControl1.resx">
+    <EmbeddedResource Include="Map\ToolControl\UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

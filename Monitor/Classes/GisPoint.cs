@@ -14,9 +14,10 @@ namespace Monitor.Map
     {
         static SQLiteConnection m_dbConnection; //数据库连接句柄
         public static long num;
-        
-        //温度点X坐标
-        public double X
+		public List<GisPoint> m_PointList = new List<GisPoint>();
+
+		//温度点X坐标
+		public double X
         {
             get;
             set;
@@ -52,7 +53,7 @@ namespace Monitor.Map
         }
 
         //创建与数据库的连接
-        public static void connectToDB(string dbPath)
+        public  void connectToDB(string dbPath)
         {
             m_dbConnection = new SQLiteConnection(dbPath);
             m_dbConnection.Open();
@@ -76,7 +77,7 @@ namespace Monitor.Map
         /// <summary>
         /// 从数据库中读取温度点数据至m_PointList中
         /// </summary>
-        public static void readData(List<GisPoint> m_PointList)
+        public  void readData()
         {
             int i = 0;
             string sql = "select * from point";
@@ -96,6 +97,16 @@ namespace Monitor.Map
 			closeDB();
 			
         }
+
+		public void InitLineData(ClassLine line)
+		{
+			line.startX = m_PointList[0].X;
+			line.startY = m_PointList[0].Y;
+			line.endX = m_PointList[10].X;
+			line.endY = m_PointList[10].Y;
+
+
+		}
 
         /// <summary>
         /// 读取分段节点数据
@@ -117,6 +128,8 @@ namespace Monitor.Map
             }
             reader.Close();
         }
+
+
         /// <summary>
         /// 用于显示标签时获取温度点处的温度值
         /// </summary>

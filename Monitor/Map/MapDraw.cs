@@ -8,7 +8,7 @@ using MapWinGIS;
 using AxMapWinGIS;
 using System.Data;
 using System.IO;
-using Monitor.Help;
+using Monitor.Map;
 using Monitor.Core;
 
 namespace Monitor.Map
@@ -52,7 +52,7 @@ namespace Monitor.Map
 
 			for(int i = 0;i < data.Count; i++)
 			{
-				WriteLine(data[i].startPoint.x, data[i].startPoint.y, data[i].endPoint.x, data[i].endPoint.y, data[i].color);
+				//WriteLine(data[i].startPoint.x, data[i].startPoint.y, data[i].endPoint.x, data[i].endPoint.y, data[i].color);
 			}
 
 
@@ -65,14 +65,14 @@ namespace Monitor.Map
 		/// <param name="Ystart"></param>
 		/// <param name="Xend"></param>
 		/// <param name="Yend"></param>
-		public int WriteLine(double Xstart, double Ystart, double Xend, double Yend, int color)
+		public int WriteLine(ClassLine line, LineSet lineSet)
 		{
 			var axMap1 = map;
-			var sf = CreateLines(Xstart,Ystart,Xend,Yend);
+			var sf = CreateLines(line.startX,line.startY, line.endX, line.endY);
 			layerHandle = axMap1.AddLayer(sf, true);
 			var utils = new Utils();
 			LinePattern pattern = new LinePattern();
-			pattern.AddLine(utils.ColorByName((tkMapColor)(color)), 6.0f, tkDashStyle.dsSolid);
+			pattern.AddLine(utils.ColorByName(lineSet.color), lineSet.Width, lineSet.style);
 			ShapefileCategory ct = sf.Categories.Add("Railroad");
 			ct.DrawingOptions.LinePattern = pattern;
 			ct.DrawingOptions.UseLinePattern = true;
@@ -127,7 +127,7 @@ namespace Monitor.Map
 		//	public static Shapefile sf = new Shapefile();
 		private Shapefile sf = new Shapefile() ;
 
-		private int layerHandle;
+		private int layerHandle = -1;
 
 		private int shapindex = -1;
 
@@ -168,7 +168,7 @@ namespace Monitor.Map
 		/// <param name="data"></param>
 		/// <param name="pointSet"></param>
 		/// <returns></returns>
-		public int CreatPoint(Point[] data, PointSet pointSet)
+		public int CreatPoint(ClassPoint[] data, PointSet pointSet)
 		{
 			
 			Shape shp = new Shape(); //创建shp图层
@@ -207,7 +207,7 @@ namespace Monitor.Map
 		/// <param name="data"></param>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public int AddPicture(Point data, string path)
+		public int AddPicture(ClassPoint data, string path)
 		{
 			
 			Shape shp = new Shape(); //创建shp图层
@@ -238,29 +238,18 @@ namespace Monitor.Map
 
 		public void RemoveLayer()
 		{
-			map.RemoveLayer(layerHandle);
-			sf = new Shapefile();
-			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
+			if(layerHandle != -1)
+			{
+				map.RemoveLayer(layerHandle);
+				sf = new Shapefile();
+				sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
+
+			}
+		
 
 		}
 
 	}
 
-	public struct PointSet
-	{
-		public string categroyName;
-		public tkDefaultPointSymbol shape;
-		public  tkMapColor color;
-		public  float size;
-
-		public PointSet(string categroyName, tkDefaultPointSymbol shape, tkMapColor color, float size)
-		{
-			this.categroyName = categroyName;
-			this.shape = shape;
-			this.color = color;
-			this.size = size;
-
-		}
-
-	}
+	
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Data;
-using Monitor.Help;
+using Monitor.Map;
 
 namespace Monitor.DataTransfer
 {

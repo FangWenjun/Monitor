@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MapWinGIS;
 using AxMapWinGIS;
 using Monitor.Classes;
-using Monitor.Help;
+using Monitor.Map;
 using System.Diagnostics;
 using Monitor.Core;
 

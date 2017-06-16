@@ -10,6 +10,8 @@ using Monitor.DataTransfer;
 using System.IO;
 using AxMapWinGIS;
 using MapWinGIS;
+using Monitor.Core;
+
 
 namespace Monitor
 {
@@ -28,8 +30,14 @@ namespace Monitor
 		public classDrawPoint drawPoint_Ais;
 
 		private int MainLayerHandle;   //底图句柄（需要缩放的地图级别）
-	  
-		
+
+		private PointSet pointSet;
+		private List<Shapefile> sf_mouseMove = new List<Shapefile>();
+		private List<Shapefile> sf_mouseDown = new List<Shapefile>();
+
+
+
+
 
 
 		/// <summary>
@@ -96,29 +104,33 @@ namespace Monitor
 			_mapForm.Activate();
 			
 
-			List<Shapefile> sf_mouseMove = new List<Shapefile>();
-			List<Shapefile> sf_mouseDown = new List<Shapefile>();
+			
+
+			MouseMoveOperator mouseMoveOperate;
+			MouseDownOperator mouseDownOperate;
 
 			#region	加载gis地图
 			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\底图.shp",@"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" };
 			mapLayer = new MapLayer();
 			MainLayerHandle = mapLayer.AddLayer(_mapForm.Map,str);
-			
-			
-		//	_mapForm.Map.ZoomToMaxExtents();
-//			_mapForm.Map.ZoomToLayer(MainLayerHandle);
-
-
 			#endregion
 
+
+			//	_mapForm.Map.ZoomToMaxExtents();
+			//	_mapForm.Map.ZoomToLayer(MainLayerHandle);
+
+
+
+
 			#region	 在地图上划线
-			List<GisPoint> m_PointList = new List<GisPoint>();
-			GisPoint.connectToDB("Data Source=" + new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\data.db");
-			GisPoint.readData(m_PointList);
-			GisPoint.SortList();
+			ClassLine line = new ClassLine();
+			GisPoint gisPoint = new GisPoint();
+			LineSet lineSet = new LineSet(tkMapColor.Yellow, 6.0f, tkDashStyle.dsSolid);
+			gisPoint.connectToDB("Data Source=" + new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\data.db");
+			gisPoint.readData();
+			gisPoint.InitLineData(line);
 			drawLine = new classDrawLine(_mapForm.Map);
-			drawLine.WriteLine(m_PointList[0].X, m_PointList[0].Y,
-				m_PointList[10].X, m_PointList[10].Y, (int)ColorEnum.Yellow);
+			drawLine.WriteLine(line, lineSet);
 			#endregion
 
 			#region	  在gis地图中添加ais数据
@@ -126,21 +138,26 @@ namespace Monitor
 			SqliteData sqlite = new SqliteData("Data Source=" + new DirectoryInfo("../../../../").FullName +
 			"Monitor\\Monitor\\data\\data.db");
 			DataTable gisData = sqlite.readData("Point");
-	
+
 			//2、实例化AISData类
 			ais = new AISData(_mapForm.Map, gisData);
 			drawPoint_Ais = new classDrawPoint(MapForm.Map);
+
 			//3、在地图上加载ais数据
-			PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
-			drawPoint_Ais.CreatPoint(ais.point, pointSet);
-			sf_mouseMove.Add(drawPoint_Ais.Shp);
+			pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
+		//	drawPoint_Ais.CreatPoint(ais.point, pointSet);
+		//	sf_mouseMove.Add(drawPoint_Ais.Shp);
+
+
+
+
 
 			#endregion
 
 
 			#region
 			drawPoint = new classDrawPoint(_mapForm.Map);
-			var pnt = new MapWinGIS.Point();
+			var pnt = new ClassPoint();
 			pnt.x = 121.907567728461;
 			pnt.y = 30.8729913928844;
 			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
@@ -152,6 +169,20 @@ namespace Monitor
 			_mapForm.SfMouseMove = sf_mouseMove;
 			_mapForm.SfMouseDown = sf_mouseDown;
 
+			mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
+			mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
+
+			//传入委托
+			MapForm.MouseMoveOperate = mouseMoveOperate;
+			MapForm.mouseDownOperate = mouseDownOperate;
+
+
+		
+
+
+
+			
+
 
 
 
@@ -160,6 +191,8 @@ namespace Monitor
 
 
 		}
+
+	
 
 		private void InitMenus()
         {
@@ -197,6 +230,16 @@ namespace Monitor
 		{
 			DialogResult result = MessageBox.Show("是否确认关闭？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 			e.Cancel = result != DialogResult.Yes;
+		}
+
+		private void timerTick(object sender, EventArgs e)
+		{
+			drawPoint_Ais.RemoveLayer();
+			drawPoint_Ais.CreatPoint(ais.point, pointSet);
+			sf_mouseMove.Add(drawPoint_Ais.Shp);
+
+			
+
 		}
 	}
 }

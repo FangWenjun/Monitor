@@ -11,7 +11,7 @@ using System.Diagnostics;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using Monitor.Classes;
-using Monitor.Help;
+using Monitor.Map;
 
 namespace Monitor.Forms
 {

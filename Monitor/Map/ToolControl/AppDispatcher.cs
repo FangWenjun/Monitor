@@ -41,78 +41,19 @@ namespace ToolBar.Classes
 
             if (HandleLayers(command)) return;
 
-            if (HandleProject(command)) return;
-
-         //   if (HandleContextMenu(command)) return;
+      
+ 
         }
 
-        private bool HandleProject(AppCommand command)
-        {
-            switch (command)
-            {
-                case AppCommand.LoadProject:
-                    {
-                        string filename;
-                        if (FileHelper.ShowOpenDialog(FileType.Project, out filename))
-                        {
-                            App.Project.Load(filename);
-                        }
-                    }
-                    return true;
-                case AppCommand.SaveProject:
-                    {
-                        if (App.Project.Save())
-                            MessageHelper.Info("Project was saved: ");
-                    }
-                    return true;
-                case AppCommand.SaveProjectAs:
-                    App.Project.SaveAs();
-                    return true;
-                case AppCommand.CloseProject:
-                    App.Project.TryClose();
-                    return true;
-                case AppCommand.SetProjection:
-                    {
-                        if (App.Map.NumLayers > 0)
-                        {
-                            MessageHelper.Info("It's not allowed to change map projection when there are layers on the map.");
-                        }
-                        else
-                        {
-                          
-                        }
-                    }
-                    return true;
-            }
-            return false;
-        }
+   
 
         private bool HandleLayers(AppCommand command)
         {
             switch (command)
             {
-                case AppCommand.AddDatabase:
-                    //    LayerHelper.OpenOgrLayer();
-                    return true;
-                case AppCommand.Open:
-                    LayerHelper.AddLayer(LayerType.All);
-                    return true;
-                case AppCommand.AddRaster:
-                    //LayerHelper.AddLayer(LayerType.Raster);
-                    return true;
-                case AppCommand.AddVector:
-                    //LayerHelper.AddLayer(LayerType.Vector);
-                    return true;
-                case AppCommand.RemoveLayer:
-                    //LayerHelper.RemoveLayer();
-                    return true;
                 case AppCommand.ZoomToLayer:
                     LayerHelper.ZoomToLayer(map, layerHandle);
                     return true;
-                case AppCommand.CreateLayer:
-                    //Editor.RunCommand(EditorCommand.CreateLayer);
-                    return true;
-           
             }
             return false;
         }
@@ -151,9 +92,7 @@ namespace ToolBar.Classes
                 case AppCommand.ZoomToSelected:
                     LayerHelper.ZoomToSelected();
                     break;
-                case AppCommand.ClearSelection:
-                   // LayerHelper.ClearSelection();
-                    break;
+      
                 case AppCommand.Click:
 					LayerHelper.MouseClickMode(map, MapForm);
                     break;

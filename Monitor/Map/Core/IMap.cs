@@ -21,7 +21,7 @@ namespace Monitor.Core
 		AxMap Map { get; set;}
 		Shapefile Shp { get;}
 
-		int WriteLine(double Xstart, double Ystart, double Xend, double Yend, int color);
+		int WriteLine(ClassLine line, LineSet lineSet);
 
 	}
 
@@ -29,8 +29,8 @@ namespace Monitor.Core
 	{
 		AxMap Map { get; set; }
 		Shapefile Shp { get; }
-		int CreatPoint(Point[] data, PointSet pointSet);
-		int AddPicture(Point data, string path);
+		int CreatPoint(ClassPoint[] data, PointSet pointSet);
+		int AddPicture(ClassPoint data, string path);
 	}
 
 

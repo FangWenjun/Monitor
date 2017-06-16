@@ -71,14 +71,22 @@ namespace Monitor.Map
 		public List<Shapefile> SfMouseMove
 		{
 			set { sfMouseMove = value; }
+			get { return sfMouseMove; }
 		}
 
 		public List<Shapefile> SfMouseDown
 		{
 			set { sfMouseDown = value; }
+			get { return sfMouseDown; }
 		}
 
-	
+		public  MouseMoveOperator MouseMoveOperate
+		{
+			set { mouseMoveOperate = value; }
+			get { return mouseMoveOperate; }
+		}
+
+
 
 		public ControlMapForm()
         {
@@ -137,8 +145,8 @@ namespace Monitor.Map
 		{
 			axMap1.MouseMoveEvent += axMap1_MouseMoveEvent;
 			axMap1.MouseDownEvent += axMap1_MouseDownEvent;
-			mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
-			mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
+		//	mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
+		//	mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
 		}
 
 
@@ -149,84 +157,87 @@ namespace Monitor.Map
 
 		private void axMap1_MouseMoveEvent(object sender, _DMapEvents_MouseMoveEvent e)
         {
-
-			foreach(Shapefile sf in sfMouseMove)
+			if(sfMouseMove != null)
 			{
-				if(sf != null)
+				foreach(Shapefile sf in sfMouseMove)
 				{
-					Labels labels = sf.Labels;
-					labels.FontSize = 15;
-					labels.FontBold = true;
-					labels.FrameVisible = true;
-					labels.FrameType = tkLabelFrameType.lfRectangle;
-					labels.AutoOffset = false;
-					labels.OffsetX = 40;
+					
+						Labels labels = sf.Labels;
+						labels.FontSize = 15;
+						labels.FontBold = true;
+						labels.FrameVisible = true;
+						labels.FrameType = tkLabelFrameType.lfRectangle;
+						labels.AutoOffset = false;
+						labels.OffsetX = 40;
 
-					LabelCategory cat = labels.AddCategory("Red");
-					cat.FontColor = 255;
+						LabelCategory cat = labels.AddCategory("Red");
+						cat.FontColor = 255;
 
-					double projX = 0.0;
-					double projY = 0.0;
-					Map.PixelToProj(e.x, e.y, ref projX, ref projY);
-					object result = null;
-					var ext = new Extents();
-					ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
-					if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
-					{
-						mouseMoveOperate(ais, labels, projX, projY);
-						labelFlag_MouseMove = 1;
-					}
-					else
-					{
-						sf.Labels.Clear();
-						labelFlag_MouseMove = 0;
-					}
-					Map.Redraw();
+						double projX = 0.0;
+						double projY = 0.0;
+						Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+						object result = null;
+						var ext = new Extents();
+						ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
+						if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
+						{
+							mouseMoveOperate(ais, labels, projX, projY);
+							labelFlag_MouseMove = 1;
+						}
+						else
+						{
+							sf.Labels.Clear();
+							labelFlag_MouseMove = 0;
+						}
+						Map.Redraw();
 				}
-
-
 			}
-			
-		
+
 		}
 
 
 
 		private void axMap1_MouseDownEvent(object sender, _DMapEvents_MouseDownEvent e)
 		{
-			foreach(Shapefile sf in sfMouseDown)
+			if(SfMouseDown != null)
 			{
-				if(sf != null)
+				foreach(Shapefile sf in sfMouseDown)
 				{
-					Labels labels = sf.Labels;
-					labels.FontSize = 15;
-					labels.FontBold = true;
-					labels.FrameVisible = true;
-					labels.FrameType = tkLabelFrameType.lfRectangle;
-					labels.AutoOffset = false;
-					labels.OffsetX = 40;
-
-					LabelCategory cat = labels.AddCategory("Red");
-					cat.FontColor = 255;
-
-					double projX = 0.0;
-					double projY = 0.0;
-					Map.PixelToProj(e.x, e.y, ref projX, ref projY);
-					object result = null;
-					var ext = new Extents();
-					ext.SetBounds(projX - 0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
-					if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+					if(sf != null)
 					{
-						mouseDownOperate(labels, projX, projY);
-						labelFlag_MouseDown = 1;
+						Labels labels = sf.Labels;
+						labels.FontSize = 15;
+						labels.FontBold = true;
+						labels.FrameVisible = true;
+						labels.FrameType = tkLabelFrameType.lfRectangle;
+						labels.AutoOffset = false;
+						labels.OffsetX = 40;
+
+						LabelCategory cat = labels.AddCategory("Red");
+						cat.FontColor = 255;
+
+						double projX = 0.0;
+						double projY = 0.0;
+						Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+						object result = null;
+						var ext = new Extents();
+						ext.SetBounds(projX - 0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
+						if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+						{
+							mouseDownOperate(labels, projX, projY);
+							labelFlag_MouseDown = 1;
+						}
+						else
+						{
+							sf.Labels.Clear();
+							labelFlag_MouseDown = 0;
+						}
+						Map.Redraw();
 					}
-					else
-					{
-						sf.Labels.Clear();
-						labelFlag_MouseDown = 0;
-					}
-					Map.Redraw();
+				
+
 				}
+			
 
 			}
 			

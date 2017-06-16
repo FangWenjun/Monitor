@@ -18,7 +18,7 @@ namespace Monitor.Map
 		private AxMap map;
 
 		public AISDataStru[] aisData;
-		public Point[] point;
+		public ClassPoint[] point;
 		public int AisHandle = -1;
 		//public MapDraw mapDraw = null;
 		public classDrawPoint drawPoint = null;
@@ -68,10 +68,10 @@ namespace Monitor.Map
 		private void IntoPointData()
 		{
 			int num = aisData.Length;
-			point = new Point[num];
+			point = new ClassPoint[num];
 			for(int i=0; i<num; i++)
 			{
-				point[i] = new Point(); 
+				point[i] = new ClassPoint(); 
 				point[i].x = aisData[i].longitude;
 				point[i].y = aisData[i].latitude;
 			}
@@ -80,7 +80,7 @@ namespace Monitor.Map
 
 		public void LoadImg(string path)
 		{
-			drawPoint.AddPicture(point[0], path);
+			//drawPoint.AddPicture(point[0], path);
 
 		}
 
@@ -97,7 +97,7 @@ namespace Monitor.Map
 			//Shapefile sf = map.get_Shapefile(AisHandle);
 			//if(sf != null)
 			//	sf.Close();
-			AisHandle = drawPoint.CreatPoint(point, pointSet);
+			//AisHandle = drawPoint.CreatPoint(point, pointSet);
 			 
 		}
 	}
@@ -146,7 +146,7 @@ namespace Monitor.Map
 			Shapefile sf = map.get_Shapefile(shapfileHandle);
 			if(sf != null)
 				sf.Close();
-			shapfileHandle = drawPoint.CreatPoint(point, pointSet);
+			//shapfileHandle = drawPoint.CreatPoint(point, pointSet);
 		}
 
 	}
