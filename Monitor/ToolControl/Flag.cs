@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     public enum AppCommand
     {

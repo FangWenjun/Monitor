@@ -96,34 +96,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
     <Compile Include="Classes\AppCommand.cs" />
     <Compile Include="Classes\AppDispatcher.cs" />
     <Compile Include="Classes\CommandDispatcher.cs" />
     <Compile Include="Classes\gbStructType.cs" />
-    <Compile Include="Classes\GetDataFormSql.cs" />
     <Compile Include="Classes\GetDataFromCSV.cs" />
-    <Compile Include="Core\IMap.cs" />
+    <Compile Include="Map\ColorEnum.cs" />
+    <Compile Include="Map\Core\IMap.cs" />
     <Compile Include="DataTransfer\SqliteData.cs" />
-    <Compile Include="File\App.cs" />
-    <Compile Include="File\AppDispatcher.cs" />
-    <Compile Include="File\CommandDispatcher.cs" />
-    <Compile Include="File\Constants.cs" />
-    <Compile Include="File\FileHelper.cs" />
-    <Compile Include="File\Flag.cs" />
-    <Compile Include="File\GisPoint.cs" />
-    <Compile Include="File\LayerHelper.cs" />
-    <Compile Include="File\MapExt.cs" />
-    <Compile Include="File\MessageHelper.cs" />
-    <Compile Include="File\Project.cs" />
-    <Compile Include="File\ProjectBase.cs" />
-    <Compile Include="File\UserControl1.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="File\UserControl1.designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GlobalVar.cs" />
     <Compile Include="Classes\Invoke.cs" />
     <Compile Include="Help\MessageHelper.cs" />
     <Compile Include="Classes\SelectionChangedArgs.cs" />
@@ -147,9 +127,8 @@
     <Compile Include="Forms\Sign.Designer.cs">
       <DependentUpon>Sign.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map\AISData.cs" />
-    <Compile Include="Map\GisPoint.cs" />
-    <Compile Include="Map\MapAlgori.cs" />
+    <Compile Include="Classes\AISData.cs" />
+    <Compile Include="Classes\GisPoint.cs" />
     <Compile Include="Map\MapDraw.cs" />
     <Compile Include="Map\MapLayer.cs" />
     <Compile Include="Map\Operation.cs" />
@@ -157,9 +136,24 @@
     <Compile Include="Map\TempHieraDisplay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="File\UserControl1.resx">
+    <Compile Include="ToolControl\App.cs" />
+    <Compile Include="ToolControl\AppDispatcher.cs" />
+    <Compile Include="ToolControl\CommandDispatcher.cs" />
+    <Compile Include="ToolControl\Constants.cs" />
+    <Compile Include="ToolControl\FileHelper.cs" />
+    <Compile Include="ToolControl\Flag.cs" />
+    <Compile Include="ToolControl\GisPoint.cs" />
+    <Compile Include="ToolControl\LayerHelper.cs" />
+    <Compile Include="ToolControl\MapExt.cs" />
+    <Compile Include="ToolControl\MessageHelper.cs" />
+    <Compile Include="ToolControl\Project.cs" />
+    <Compile Include="ToolControl\ProjectBase.cs" />
+    <Compile Include="ToolControl\UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolControl\UserControl1.designer.cs">
       <DependentUpon>UserControl1.cs</DependentUpon>
-    </EmbeddedResource>
+    </Compile>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -173,6 +167,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolControl\UserControl1.resx">
+      <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -246,6 +243,7 @@
   <ItemGroup>
     <None Include="Resources\click.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

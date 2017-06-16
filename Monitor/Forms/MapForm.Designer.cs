@@ -1,6 +1,6 @@
 ﻿namespace Monitor.Map
 {
-	partial class MapForm
+	partial class ControlMapForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlMapForm));
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.lblProjection = new System.Windows.Forms.Label();
 			this.axMap1 = new AxMapWinGIS.AxMap();

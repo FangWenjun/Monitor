@@ -7,7 +7,7 @@ using MapWinGIS;
 using AxMapWinGIS;
 using System.Windows.Forms;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     public static class MapExt
     {

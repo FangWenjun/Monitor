@@ -11,17 +11,18 @@ using System.Data;
 using Monitor.Map;
 using Monitor.Core;
 using System.IO;
-using File;
+using System.Collections.Generic;
+using ToolBar;
 
 namespace Monitor.Map
 {
 
-    public partial class MapForm : DockContent
+    public partial class ControlMapForm : DockContent
     {
 
-		private static MapForm _mapform = null;
-		private  File.File  m_FileControl = null;
-
+		private  ControlMapForm _mapform = null;
+		private  ToolControl  m_toolControl = null;
+	
 
 		//用于判断是否已经显示label
 		private int labelFlag_MouseMove;
@@ -30,31 +31,33 @@ namespace Monitor.Map
 		//ais图层句柄
 		public  int  AISHandle = -1;
 
-		//定时器计时Flag
-		private int  mapCheck = 0;
+		
 
 		private string[] mapPath = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp", @"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" } ;
 
 		public IAddLayer mapLayer;
 		public IDrawLine drawLine ;
 		public IDrawPoint drawPoint;
-		public MapDraw mapDraw;
+
 		public AISData ais = null;
 		public IDrawPoint drawPoint_Ais = null;
+		public List<Shapefile> sfMouseMove;
+		public List<Shapefile> sfMouseDown;
 
 		public MouseMoveOperator mouseMoveOperate;
 		public MouseDownOperator mouseDownOperate;
 
 
 
-		public static MapForm MapFormAttri
+		public  ControlMapForm MapForm
 		{
 			get { return _mapform; }
+			set { _mapform = value; }
 		}
 
-		public File.File FileControl
+		public ToolControl toolControl
 		{
-			get { return m_FileControl; }
+			get { return m_toolControl; }
 		}
 
 		public string[] MapPath
@@ -65,19 +68,25 @@ namespace Monitor.Map
 			}
 		}
 
-		public MapForm()
+		public List<Shapefile> SfMouseMove
+		{
+			set { sfMouseMove = value; }
+		}
+
+		public List<Shapefile> SfMouseDown
+		{
+			set { sfMouseDown = value; }
+		}
+
+	
+
+		public ControlMapForm()
         {
             InitializeComponent();
 			_mapform = this;
 
-			//File控件动态加载
-			m_FileControl = new File.File();
-			this.Controls.Add(m_FileControl);
-			m_FileControl.Location = new System.Drawing.Point(60, 10);
-			m_FileControl.Size = new System.Drawing.Size(147, 50);
-			//		m_FileControl.Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Bottom;
-			m_FileControl.Dock = DockStyle.None;
-			m_FileControl.BringToFront();
+			
+
 		}
 
         public AxMap Map
@@ -90,8 +99,17 @@ namespace Monitor.Map
 
 			MapInit();
 			RegisterEventHandlers();
-			//timerCheck.Tick += new EventHandler(checkTimer_Tick);
-			//timerCheck.Start();
+			//ToolControl控件动态加载
+			m_toolControl = new ToolControl();
+			this.Controls.Add(m_toolControl);
+			m_toolControl.Location = new System.Drawing.Point(60, 10);
+			m_toolControl.Size = new System.Drawing.Size(147, 50);
+			m_toolControl.Dock = DockStyle.None;
+			m_toolControl.BringToFront();
+
+			m_toolControl.Map = Map;
+			m_toolControl.MapForm = this;
+			m_toolControl.InitAttri();
 		}
 
 
@@ -119,65 +137,11 @@ namespace Monitor.Map
 		{
 			axMap1.MouseMoveEvent += axMap1_MouseMoveEvent;
 			axMap1.MouseDownEvent += axMap1_MouseDownEvent;
-		}
-
-
-		private void checkTimer_Tick(object sender, EventArgs e)
-		{
-			//mapCheck++;
-			
-			//if(10 ==  mapCheck)
-			//{
-			//	startWork();
-			//	Debug.Write("null, Start Check Map\n");
-			//}
-		
-		}
-
-
-		private void startWork()
-		{
-			#region	加载gis地图
-			mapLayer = new MapLayer();
-			mapLayer.AddLayer(MapForm.MapFormAttri.Map, mapPath);
-			#endregion
-
-			#region	 在地图上划线
-			GisPoint.connectToDB(App.dbname);
-			GisPoint.readData();
-			GisPoint.SortList();
-			
-			drawLine = new DrawLine(MapForm.MapFormAttri.Map);
-			drawLine.WriteLine(App.m_PointList[0].X, App.m_PointList[0].Y,
-				App.m_PointList[10].X, App.m_PointList[10].Y, -256);
-			#endregion
-
-			#region	  在gis地图中添加ais数据
-			//1、获取数据库中数据
-			SqliteData sqlite = new SqliteData(App.dbname);
-			DataTable gisData = sqlite.readData("Point");
 			mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
-		
-			//2、实例化AISData类
-			ais = new AISData(MapForm.MapFormAttri.Map, gisData);
-			drawPoint_Ais = new DrawPoint(MapForm.MapFormAttri.Map);
-			//3、在地图上加载ais数据
-			PointSet pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
-			drawPoint_Ais.CreatPoint(ais.point, pointSet);
-			#endregion
-
-			#region	在地图上加载图片
-			drawPoint = new DrawPoint(MapForm.MapFormAttri.Map);
-			var pnt = new MapWinGIS.Point();
 			mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
-			pnt.x = 121.902567181871;
-			pnt.y = 30.8729913928844;
-			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
-			drawPoint.AddPicture(pnt, path);
-			#endregion
-
-
 		}
+
+
 
 
 
@@ -185,81 +149,88 @@ namespace Monitor.Map
 
 		private void axMap1_MouseMoveEvent(object sender, _DMapEvents_MouseMoveEvent e)
         {
-			#region 显示ais数据标签详情
-			Shapefile sf = drawPoint_Ais.Shp;
-			if(sf != null)
+
+			foreach(Shapefile sf in sfMouseMove)
 			{
-				Labels labels = sf.Labels;
-				labels.FontSize = 15;
-				labels.FontBold = true;
-				labels.FrameVisible = true;
-				labels.FrameType = tkLabelFrameType.lfRectangle;
-				labels.AutoOffset = false;
-				labels.OffsetX = 40;
-
-				LabelCategory cat = labels.AddCategory("Red");
-				cat.FontColor = 255;
-
-				double projX = 0.0;
-				double projY = 0.0;
-				Map.PixelToProj(e.x, e.y, ref projX, ref projY);
-				object result = null;
-				var ext = new Extents();
-				ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
-				if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
+				if(sf != null)
 				{
-					mouseMoveOperate(MapForm.MapFormAttri.ais, labels, projX, projY);	
-					labelFlag_MouseMove = 1;
+					Labels labels = sf.Labels;
+					labels.FontSize = 15;
+					labels.FontBold = true;
+					labels.FrameVisible = true;
+					labels.FrameType = tkLabelFrameType.lfRectangle;
+					labels.AutoOffset = false;
+					labels.OffsetX = 40;
+
+					LabelCategory cat = labels.AddCategory("Red");
+					cat.FontColor = 255;
+
+					double projX = 0.0;
+					double projY = 0.0;
+					Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+					object result = null;
+					var ext = new Extents();
+					ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
+					if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
+					{
+						mouseMoveOperate(ais, labels, projX, projY);
+						labelFlag_MouseMove = 1;
+					}
+					else
+					{
+						sf.Labels.Clear();
+						labelFlag_MouseMove = 0;
+					}
+					Map.Redraw();
 				}
-				else
-				{
-					sf.Labels.Clear();
-					labelFlag_MouseMove = 0;
-				}
-				Map.Redraw();
+
+
 			}
-			#endregion
+			
+		
 		}
 
 
 
 		private void axMap1_MouseDownEvent(object sender, _DMapEvents_MouseDownEvent e)
 		{
-			#region 显示ais数据标签详情
-			Shapefile sf = drawPoint.Shp;
-			if(sf != null)
+			foreach(Shapefile sf in sfMouseDown)
 			{
-				Labels labels = sf.Labels;
-				labels.FontSize = 15;
-				labels.FontBold = true;
-				labels.FrameVisible = true;
-				labels.FrameType = tkLabelFrameType.lfRectangle;
-				labels.AutoOffset = false;
-				labels.OffsetX = 40;
-
-				LabelCategory cat = labels.AddCategory("Red");
-				cat.FontColor = 255;
-
-				double projX = 0.0;
-				double projY = 0.0;
-				Map.PixelToProj(e.x, e.y, ref projX, ref projY);
-				object result = null;
-				var ext = new Extents();
-				ext.SetBounds(projX-0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
-				if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+				if(sf != null)
 				{
-					mouseDownOperate(labels, projX, projY);
-					labelFlag_MouseDown = 1;
+					Labels labels = sf.Labels;
+					labels.FontSize = 15;
+					labels.FontBold = true;
+					labels.FrameVisible = true;
+					labels.FrameType = tkLabelFrameType.lfRectangle;
+					labels.AutoOffset = false;
+					labels.OffsetX = 40;
+
+					LabelCategory cat = labels.AddCategory("Red");
+					cat.FontColor = 255;
+
+					double projX = 0.0;
+					double projY = 0.0;
+					Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+					object result = null;
+					var ext = new Extents();
+					ext.SetBounds(projX - 0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
+					if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+					{
+						mouseDownOperate(labels, projX, projY);
+						labelFlag_MouseDown = 1;
+					}
+					else
+					{
+						sf.Labels.Clear();
+						labelFlag_MouseDown = 0;
+					}
+					Map.Redraw();
 				}
-				else
-				{
-					sf.Labels.Clear();
-					labelFlag_MouseDown = 0;
-				}
-				Map.Redraw();
+
 			}
-			#endregion
-
+			
+	
 		}
 
 		private void axMap1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -268,12 +239,10 @@ namespace Monitor.Map
 			{
 		
 					axMap1.CursorMode = tkCursorMode.cmNone;
-				
-
 			}
 
 		}
-
+										
 	
 	}
 }

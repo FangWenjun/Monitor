@@ -8,7 +8,7 @@ using System.Diagnostics;
 using AxMapWinGIS;
 using MapWinGIS;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     public abstract class CommandDispatcher<T> where T : struct, IConvertible
     {

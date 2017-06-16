@@ -12,9 +12,9 @@ namespace Monitor.Map
 	{
 		public static void AddLabel(AISData ais, Labels labels, double projX, double projY)
 		{
-			AISDataStru aisPointData = MapAlgori.FindAisPoint(ais, projX, projY);
-			string aisLabel = "x=" + aisPointData.longitude.ToString() + "      "  +
-						"y=" + aisPointData.latitude.ToString();
+			
+			string aisLabel = "x=" + "121" + "      "  +
+						"y=" + "30";
 			labels.AddLabel(aisLabel, projX, projY, 0.0, -1);
 
 		}

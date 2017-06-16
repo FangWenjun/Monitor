@@ -35,18 +35,18 @@ namespace Monitor.Forms
             string mUserName = tBName.Text; 		
             string mPassword = tBPassword.Text;
             string mIP = tBIP.Text;
-            GlobalVar.IP = tBIP.Text;
+        
             int rTmp = 0;
             //1、判断ip、用户名、密码是否输入
             if((mUserName.Length != 0)&&(mPassword.Length != 0)&&(mIP.Length != 0))
             {
                 //2、检查数据库中是否有相同用户名和密码
-                rTmp = CheckUserPasswordInMysqlDB(GlobalVar.LoginConn, mUserName, mPassword);
-                //3、若用户名和密码正确后将标志位设为ok
-                if (rTmp > 0)
-                    this.DialogResult = DialogResult.OK;
-                else
-                    MessageHelper.Info("密码不正确!");
+                //rTmp = CheckUserPasswordInMysqlDB(GlobalVar.LoginConn, mUserName, mPassword);
+                ////3、若用户名和密码正确后将标志位设为ok
+                //if (rTmp > 0)
+                //    this.DialogResult = DialogResult.OK;
+                //else
+                //    MessageHelper.Info("密码不正确!");
             
             }
             else

@@ -77,55 +77,9 @@ namespace Monitor.Map
 			}
 		}
 
-
-		public static void AddSqliteLayer(AxMap map)
+		public int AddLayer(AxMap map, string[] LayerRoute)
 		{
-			string fn = @"d:\data2.sqlite";
-			var ds = new OgrDatasource();
-			if(!ds.Open(fn))
-			{
-				Debug.Print("Failed to establish connection: " + ds.GdalLastErrorMsg);
-			}
-			else
-			{
-				map.RemoveAllLayers();
-
-				// make sure it matches SRID of the layers (4326 in our case)
-				map.Projection = tkMapProjection.PROJECTION_WGS84;
-
-				for(int i = 0;i < ds.LayerCount;i++)
-				{
-					var layer = ds.GetLayer(i);
-					if(layer != null)
-					{
-						int handle = map.AddLayer(layer, true);
-						if(handle == -1)
-						{
-							Debug.WriteLine("Failed to add layer to the map: " + map.get_ErrorMsg(map.LastErrorCode));
-						}
-						else
-						{
-							Debug.WriteLine("Layer was added the map: " + layer.Name);
-						}
-					}
-				}
-				map.ZoomToMaxVisibleExtents();
-				ds.Close();
-				map.Redraw();
-			}
-
-		}
-
-		/// <summary>
-		/// 在地图上添加图层
-		/// </summary>
-		/// <param name="Map"></param>
-		/// <param name="LayerRoute"></param>
-		/// <returns>返回图层句柄</returns>
-		public int AddLayer(AxMap Map, string[] LayerRoute)
-		{
-			int layerHandle= -1;
-			var map = Map;
+			int layerHandle = 1;
 			map.LockWindow(tkLockMode.lmLock);
 
 			string layerName = "";
@@ -135,6 +89,8 @@ namespace Monitor.Map
 				foreach(var name in LayerRoute)
 				{
 					layerName = name;
+					string str_filename = layerName.Substring(layerName.LastIndexOf("\\") + 
+						1, layerName.LastIndexOf(".") - (layerName.LastIndexOf("\\") + 1)); //文件名称
 					var layer = fm.Open(name);
 					if(layer == null)
 					{
@@ -143,8 +99,18 @@ namespace Monitor.Map
 					}
 					else
 					{
-						layerHandle = Add(map, layer, true);
+						if(str_filename == "底图")
+						{
+							layerHandle = Add(map, layer, true);
+
+						}
+						else
+						{
+							Add(map, layer, true);
+						}
+
 					}
+				
 				}
 			}
 			catch
@@ -155,7 +121,7 @@ namespace Monitor.Map
 			{
 				map.LockWindow(tkLockMode.lmUnlock);
 			}
-			return layerHandle;
+			return 0;
 		}
 	}
 }

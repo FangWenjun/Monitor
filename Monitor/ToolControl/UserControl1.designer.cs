@@ -1,33 +1,33 @@
-﻿namespace File
+﻿namespace ToolBar
 {
-    partial class File
-    {
-        /// <summary>
-        /// 必需的设计器变量。
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class ToolControl
+	{
+		/// <summary>
+		/// 必需的设计器变量。
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// 清理所有正在使用的资源。
-        /// </summary>
-        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// 清理所有正在使用的资源。
+		/// </summary>
+		/// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+		protected override void Dispose(bool disposing)
+		{
+			if(disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region 组件设计器生成的代码
+		#region 组件设计器生成的代码
 
-        /// <summary>
-        /// 设计器支持所需的方法 - 不要
-        /// 使用代码编辑器修改此方法的内容。
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// 设计器支持所需的方法 - 不要
+		/// 使用代码编辑器修改此方法的内容。
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this._toolStripLayer = new System.Windows.Forms.ToolStrip();
 			this.toolZoomIn = new System.Windows.Forms.ToolStripButton();
 			this.toolZoomOut = new System.Windows.Forms.ToolStripButton();
@@ -42,11 +42,11 @@
 			this._toolStripLayer.AutoSize = false;
 			this._toolStripLayer.Dock = System.Windows.Forms.DockStyle.None;
 			this._toolStripLayer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolZoomIn,
-            this.toolZoomOut,
-            this.toolZoomToLayer,
-            this.toolPan,
-            this.toolClick});
+			this.toolZoomIn,
+			this.toolZoomOut,
+			this.toolZoomToLayer,
+			this.toolPan,
+			this.toolClick});
 			this._toolStripLayer.Location = new System.Drawing.Point(0, 0);
 			this._toolStripLayer.Name = "_toolStripLayer";
 			this._toolStripLayer.Size = new System.Drawing.Size(147, 50);
@@ -83,25 +83,25 @@
 			this.toolClick.Name = "toolClick";
 			this.toolClick.Size = new System.Drawing.Size(23, 47);
 			// 
-			// File
+			// ToolControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._toolStripLayer);
-			this.Name = "File";
+			this.Name = "ToolControl";
 			this.Size = new System.Drawing.Size(147, 50);
 			this._toolStripLayer.ResumeLayout(false);
 			this._toolStripLayer.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
-        private System.Windows.Forms.ToolStripButton toolZoomIn;
-        private System.Windows.Forms.ToolStripButton toolZoomOut;
-        private System.Windows.Forms.ToolStripButton toolZoomToLayer;
-        private System.Windows.Forms.ToolStripButton toolPan;
-        private System.Windows.Forms.ToolStrip _toolStripLayer;
+		#endregion
+		private System.Windows.Forms.ToolStripButton toolZoomIn;
+		private System.Windows.Forms.ToolStripButton toolZoomOut;
+		private System.Windows.Forms.ToolStripButton toolZoomToLayer;
+		private System.Windows.Forms.ToolStripButton toolPan;
+		private System.Windows.Forms.ToolStrip _toolStripLayer;
 		private System.Windows.Forms.ToolStripButton toolClick;
 	}
 }

@@ -8,7 +8,7 @@ using System.Data;
 using System.Data.Common;
 
 
-namespace File.Classes
+namespace Monitor.Map
 {
     public class GisPoint:IComparable
     {
@@ -76,7 +76,7 @@ namespace File.Classes
         /// <summary>
         /// 从数据库中读取温度点数据至m_PointList中
         /// </summary>
-        public static void readData()
+        public static void readData(List<GisPoint> m_PointList)
         {
             int i = 0;
             string sql = "select * from point";
@@ -89,10 +89,12 @@ namespace File.Classes
                 point.X = (double)reader[1];
                 point.Y = (double)reader[2];
                 point.TEMP = (double)reader[3];
-                Constants.m_PointList.Add(point);
+				m_PointList.Add(point);
                 i++;
             }
             reader.Close();
+			closeDB();
+			
         }
 
         /// <summary>
@@ -144,8 +146,7 @@ namespace File.Classes
         /// </summary>
         public static void SortList()
         {
-           Constants.m_PointList.Sort();
-
+         
         }
 
         public int CompareTo(object obj)

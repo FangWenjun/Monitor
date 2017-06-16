@@ -10,7 +10,7 @@ namespace Monitor.Map
 	public class TempDataLoad
 	{
 		private TempDataClassification tempClassify;
-		private DrawLine drawLine;
+		private classDrawLine drawLine;
 		private TempClassificationLevel[] level;
 		private TempDataStru[] tempDataList;
 		private AxMap map;
@@ -26,7 +26,7 @@ namespace Monitor.Map
 
 		public void LoadTempData()
 		{
-			drawLine = new DrawLine(map);
+			drawLine = new classDrawLine(map);
 			tempClassify = new TempDataClassification(level);
 			tempClassify.ClassifyTempColor(tempDataList);
 			tempClassify.ClassifyCoordinateColor();

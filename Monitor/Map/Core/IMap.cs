@@ -19,7 +19,7 @@ namespace Monitor.Core
 	public interface IDrawLine
 	{
 		AxMap Map { get; set;}
-		Shapefile Shp { get; set;}
+		Shapefile Shp { get;}
 
 		int WriteLine(double Xstart, double Ystart, double Xend, double Yend, int color);
 
@@ -28,7 +28,7 @@ namespace Monitor.Core
 	public interface IDrawPoint
 	{
 		AxMap Map { get; set; }
-		Shapefile Shp { get; set; }
+		Shapefile Shp { get; }
 		int CreatPoint(Point[] data, PointSet pointSet);
 		int AddPicture(Point data, string path);
 	}

@@ -1,56 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-using File.Classes;
 using System.IO;
 using MapWinGIS;
 using AxMapWinGIS;
 using Monitor;
 using Monitor.Map;
+using ToolBar.Classes;
 
-namespace File
+namespace ToolBar
 {
-    public partial class File: UserControl
+    public partial class ToolControl: UserControl
     {
-        private AxMap filemap = null;
+        private AxMap map = null;
+		private ControlMapForm mapform;
 
-        public const string WINDOW_TITLE = "MWLite";
 
         private readonly AppDispatcher _dispatcher = new AppDispatcher();
         protected string Filename { get; set; }
 
-        private static File _file = null;
+        private static ToolControl _file = null;
 
-        public  AxMap FileMap
+        public  AxMap Map
         {
             get
             {
-                return filemap;
+                return map;
             }
             set
             {
-                filemap = value;
+                map = value;
             }
         }
 
-        public File()
+		public ControlMapForm MapForm
+		{
+			set { mapform = value; }
+			get { return mapform; }
+		}
+
+	
+
+        public ToolControl()
         {
-			filemap = MapForm.MapFormAttri.Map;
+			
             InitializeComponent();
             _file = this;
             InitMenus();
-            Dispatcher.InitMoveEvent();
+     //       Dispatcher.InitMoveEvent();
+			
      
         }
 
-        public static File Instance
+        public static ToolControl Instance
         {
             get { return _file; }
         }
@@ -58,7 +62,15 @@ namespace File
         private void InitMenus()
         {
             Dispatcher.InitMenu(_toolStripLayer.Items);
+			
         }
+
+		public void InitAttri()
+		{
+			Dispatcher.Map = Map;
+			Dispatcher.MapForm = MapForm;
+
+		}
 
         internal AppDispatcher Dispatcher
         {

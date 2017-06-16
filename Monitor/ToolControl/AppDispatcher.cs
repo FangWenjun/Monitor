@@ -3,14 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using File.Classes;
+using ToolBar.Classes;
 using System.Windows.Forms;
 using MapWinGIS;
+using AxMapWinGIS;
+using Monitor.Map;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     internal class AppDispatcher : CommandDispatcher<AppCommand>
     {
+		private AxMap map;
+		private ControlMapForm mapForm = null;
+		private int layerHandle;
+
+		public AxMap Map
+		{
+			set { map = value; }
+			get { return map; }
+		}
+
+		public ControlMapForm MapForm
+		{
+			get { return mapForm; }
+			set { mapForm = value; }
+		}
+
+		public int LayerHandle
+		{
+			set { layerHandle = value; }
+			get { return layerHandle; }
+		}
+
         public override void Run(AppCommand command)
         {
             if (HandleCursors(command)) return;
@@ -83,7 +107,7 @@ namespace File.Classes
                     //LayerHelper.RemoveLayer();
                     return true;
                 case AppCommand.ZoomToLayer:
-                    LayerHelper.ZoomToLayer();
+                    LayerHelper.ZoomToLayer(map, layerHandle);
                     return true;
                 case AppCommand.CreateLayer:
                     //Editor.RunCommand(EditorCommand.CreateLayer);
@@ -131,7 +155,7 @@ namespace File.Classes
                    // LayerHelper.ClearSelection();
                     break;
                 case AppCommand.Click:
-					LayerHelper.MouseClickMode();
+					LayerHelper.MouseClickMode(map, MapForm);
                     break;
                 case AppCommand.None:
                     return true;

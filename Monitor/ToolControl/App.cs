@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AxMapWinGIS;
-using File;
+using ToolBar;
 using MapWinGIS;
 
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     public static class App
     {
@@ -16,7 +16,7 @@ namespace File.Classes
 
         public static AxMap Map			   
         {
-            get { return File.Instance.FileMap; }
+            get { return ToolControl.Instance.Map; }
         }
 
         public static Project Project

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     public static class FileHelper
     {

@@ -8,7 +8,7 @@ using System.Data;
 using System.Data.Common;
 
 
-namespace Monitor.Map
+namespace ToolBar.Classes
 {
     public class GisPoint:IComparable
     {
@@ -89,12 +89,10 @@ namespace Monitor.Map
                 point.X = (double)reader[1];
                 point.Y = (double)reader[2];
                 point.TEMP = (double)reader[3];
-				App.m_PointList.Add(point);
+                Constants.m_PointList.Add(point);
                 i++;
             }
             reader.Close();
-			closeDB();
-			
         }
 
         /// <summary>
@@ -146,7 +144,7 @@ namespace Monitor.Map
         /// </summary>
         public static void SortList()
         {
-           App.m_PointList.Sort();
+           Constants.m_PointList.Sort();
 
         }
 

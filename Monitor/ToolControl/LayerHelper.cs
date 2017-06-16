@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MapWinGIS;
 using AxMapWinGIS;
-using File;
+using ToolBar;
 using Monitor.Map;
 
-namespace File.Classes
+namespace ToolBar.Classes
 {
     internal static class LayerHelper
     {
@@ -62,19 +62,10 @@ namespace File.Classes
                     {
                         string msg = string.Format("Failed to open datasource: {0} \n {1}", name, fm.ErrorMsg[fm.LastErrorCode]);
                         MessageHelper.Warn(msg);
-                    }
-                    else if (layer is OgrDatasource)
-                    {
-                        var ds = layer as OgrDatasource;
-                        for (int i = 0; i < ds.LayerCount; i++)
-                        {
-                            var l = ds.GetLayer(i, false);
-                            //AddLayer(l);
-                        }
-                        map.ZoomToMaxExtents();
-                    }
+                    } 
                     else
                     {
+						//if()
                         Add(map,layer,true);
                     }
                 }
@@ -85,15 +76,16 @@ namespace File.Classes
             }
             finally
             {
-           //     legend.Unlock();
+       
                 map.LockWindow(tkLockMode.lmUnlock);
             }
         }
 
-        public static void ZoomToLayer()
+        public static void ZoomToLayer(AxMap map, int layerHandle)
         {
-          //  int handle = App.Legend.SelectedLayer;
-          //  App.Map.ZoomToLayer(handle);
+			
+			map.ZoomToLayer(layerHandle);
+
         }
 
         public static void ZoomToSelected()
@@ -102,32 +94,7 @@ namespace File.Classes
           //  App.Map.ZoomToSelected(handle);
         }
 
-        //public static void ClearSelection()
-        //{
-        //    int handle = App.Legend.SelectedLayer;
-        //    var sf = App.Map.get_Shapefile(handle);
-        //    if (sf != null)
-        //    {
-        //        sf.SelectNone();
-        //        MainForm.Instance.RefreshUI();
-        //        App.Map.Redraw();
-        //    }
-        //}
-
-        //public static void OpenOgrLayer()
-        //{
-        //    using (var form = new OgrLayerForm())
-        //    {
-        //        form.LayerAdded += (s, e) =>
-        //        {
-        //            if (e.Layer == null) return;
-        //            AddLayer(e.Layer);
-        //            App.Map.Refresh();
-        //            App.Legend.Refresh();
-        //        };
-        //        form.ShowDialog(MainForm.Instance);
-        //    }
-        //}
+   
 
         public static void CreatePointShapefile(AxMap Map, List<GisPoint>[] ListData, int num)
         {
@@ -186,10 +153,10 @@ namespace File.Classes
             Map.SendMouseMove = true;
         }
 
-		public static void MouseClickMode()
+		public static void MouseClickMode(AxMap map, ControlMapForm mapform)
 		{
-			MapForm.MapFormAttri.Map.CursorMode = tkCursorMode.cmNone;
-			MapForm.MapFormAttri.Cursor = Cursors.Default;
+			map.CursorMode = tkCursorMode.cmNone;
+			mapform.Cursor = Cursors.Default;
 			
 		}
     }
