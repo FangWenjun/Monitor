@@ -57,6 +57,7 @@ namespace Monitor.Map
 			{
 				aisData[i].longitude = (double)table.Rows[i][1];
 				aisData[i].latitude = ( double ) table.Rows[i][2];
+				aisData[i].str = table.Rows[i][3].ToString();
 			}
 		}
 
@@ -74,6 +75,7 @@ namespace Monitor.Map
 				point[i] = new ClassPoint(); 
 				point[i].x = aisData[i].longitude;
 				point[i].y = aisData[i].latitude;
+				point[i].str = aisData[i].str;
 			}
 		}
 
@@ -110,6 +112,7 @@ namespace Monitor.Map
 		public double longitude;
 		public double latitude;
 		public DateTime time;
+		public string str;
 	}
 
 

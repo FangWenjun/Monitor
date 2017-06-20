@@ -22,16 +22,24 @@ namespace Monitor.Map
 
 		private  ControlMapForm _mapform = null;
 		private  ToolControl  m_toolControl = null;
+		private  Labels labels;
+		private  int movemoveenter = 0;
 	
 
 		//用于判断是否已经显示label
 		private int labelFlag_MouseMove;
 		private int labelFlag_MouseDown;
 
+		private Dictionary<string,Shapefile> sfMouseMove = new Dictionary<string, Shapefile>();
+		private Dictionary<string,Shapefile> sfMouseDown = new Dictionary<string, Shapefile>();
+
 		//ais图层句柄
 		public  int  AISHandle = -1;
 
-		
+		private int res = -1; 
+
+
+
 
 		private string[] mapPath = { @"D:\光纤传感监测系统\Monitor\Monitor\data\test4.shp", @"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" } ;
 
@@ -41,8 +49,6 @@ namespace Monitor.Map
 
 		public AISData ais = null;
 		public IDrawPoint drawPoint_Ais = null;
-		public List<Shapefile> sfMouseMove;
-		public List<Shapefile> sfMouseDown;
 
 		public MouseMoveOperator mouseMoveOperate;
 		public MouseDownOperator mouseDownOperate;
@@ -68,19 +74,26 @@ namespace Monitor.Map
 			}
 		}
 
-		public List<Shapefile> SfMouseMove
+		public Dictionary<string ,Shapefile> Sf_MouseMove
 		{
-			set { sfMouseMove = value; }
-			get { return sfMouseMove; }
+			set
+			{
+				sfMouseMove = value;
+			}
 		}
 
-		public List<Shapefile> SfMouseDown
+		public Dictionary<string, Shapefile> Sf_MouseDown
 		{
-			set { sfMouseDown = value; }
-			get { return sfMouseDown; }
+			set
+			{
+				sfMouseDown = value;
+			}
+
 		}
 
-		public  MouseMoveOperator MouseMoveOperate
+	
+
+		public MouseMoveOperator MouseMoveOperate
 		{
 			set { mouseMoveOperate = value; }
 			get { return mouseMoveOperate; }
@@ -118,6 +131,10 @@ namespace Monitor.Map
 			m_toolControl.Map = Map;
 			m_toolControl.MapForm = this;
 			m_toolControl.InitAttri();
+
+
+
+		
 		}
 
 
@@ -125,7 +142,7 @@ namespace Monitor.Map
 		private void MapInit()
         {
             axMap1.GrabProjectionFromData = true;
-          //  axMap1.CursorMode = tkCursorMode.cmNone;
+			axMap1.SendMouseMove = true;
             axMap1.SendSelectBoxFinal = true;
             axMap1.SendMouseDown = true;
             axMap1.SendMouseUp = true;
@@ -149,6 +166,8 @@ namespace Monitor.Map
 		//	mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
 		}
 
+	
+
 
 
 
@@ -157,41 +176,67 @@ namespace Monitor.Map
 
 		private void axMap1_MouseMoveEvent(object sender, _DMapEvents_MouseMoveEvent e)
         {
+			#region 原版添加标签
 			if(sfMouseMove != null)
 			{
-				foreach(Shapefile sf in sfMouseMove)
+				foreach(Shapefile sf in sfMouseMove.Values)
 				{
+
+					labels = sf.Labels;
+					labels.FontSize = 15;
+					labels.FontBold = true;
+					labels.FrameVisible = true;
+					labels.FrameType = tkLabelFrameType.lfRectangle;
+					labels.AutoOffset = false;
+					labels.OffsetX = 40;
+
+					LabelCategory cat = labels.AddCategory("Red");
+					cat.FontColor = 255;
+
+					double projX = 0.0;
+					double projY = 0.0;
+					Map.PixelToProj(e.x, e.y, ref projX, ref projY);
+					object result = null;
+					var ext = new Extents();
+					ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
+					if(sf.SelectShapes(ext, 0.00007, SelectMode.INTERSECTION, ref result))
+					{
 					
-						Labels labels = sf.Labels;
-						labels.FontSize = 15;
-						labels.FontBold = true;
-						labels.FrameVisible = true;
-						labels.FrameType = tkLabelFrameType.lfRectangle;
-						labels.AutoOffset = false;
-						labels.OffsetX = 40;
+							if( labelFlag_MouseMove == 0 )
+							{
 
-						LabelCategory cat = labels.AddCategory("Red");
-						cat.FontColor = 255;
+									mouseMoveOperate(result, sf, labels, projX, projY);
 
-						double projX = 0.0;
-						double projY = 0.0;
-						Map.PixelToProj(e.x, e.y, ref projX, ref projY);
-						object result = null;
-						var ext = new Extents();
-						ext.SetBounds(projX, projY, 0.0, projX, projY, 0.0);
-						if(sf.SelectShapes(ext, 0.00009, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseMove == 0))
-						{
-							mouseMoveOperate(ais, labels, projX, projY);
-							labelFlag_MouseMove = 1;
-						}
-						else
+									Map.Redraw();
+									movemoveenter++;
+									string tStr = "aaa:" + movemoveenter;
+									int str = labels.Count;
+									Debug.Print("labels：" + str);
+									labelFlag_MouseMove = 1;
+
+							}
+						
+					}
+					else
+					{
+						if (labelFlag_MouseMove == 1)
 						{
 							sf.Labels.Clear();
 							labelFlag_MouseMove = 0;
+							Map.Redraw();
+							movemoveenter++;
+							string tStr = "bbb:" + movemoveenter;
+							int str = labels.Count;
+							Debug.Print("labels：" + str);
 						}
-						Map.Redraw();
+		
+					}
+
 				}
+
 			}
+			#endregion
+	 
 
 		}
 
@@ -199,9 +244,10 @@ namespace Monitor.Map
 
 		private void axMap1_MouseDownEvent(object sender, _DMapEvents_MouseDownEvent e)
 		{
-			if(SfMouseDown != null)
+
+			if(sfMouseDown != null)
 			{
-				foreach(Shapefile sf in sfMouseDown)
+				foreach(Shapefile sf in sfMouseDown.Values)
 				{
 					if(sf != null)
 					{
@@ -222,17 +268,32 @@ namespace Monitor.Map
 						object result = null;
 						var ext = new Extents();
 						ext.SetBounds(projX - 0.0004, projY - 0.0004, 0.0, projX + 0.0004, projY + 0.0004, 0.0);
-						if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result) && (labelFlag_MouseDown == 0))
+						if(sf.SelectShapes(ext, 0.0001, SelectMode.INTERSECTION, ref result))
 						{
-							mouseDownOperate(labels, projX, projY);
-							labelFlag_MouseDown = 1;
+							if(labelFlag_MouseDown == 0)
+							{
+
+								mouseDownOperate(result, sf, labels, projX, projY);
+								Map.Redraw();
+								labelFlag_MouseDown = 1;
+								
+
+							}
+							
 						}
 						else
 						{
-							sf.Labels.Clear();
-							labelFlag_MouseDown = 0;
+							if(labelFlag_MouseDown == 1)
+							{
+								sf.Labels.Clear();
+								Map.Redraw();
+								labelFlag_MouseDown = 0;
+
+							}
+
+							
 						}
-						Map.Redraw();
+						
 					}
 				
 

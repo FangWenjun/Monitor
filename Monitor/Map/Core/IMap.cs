@@ -34,7 +34,7 @@ namespace Monitor.Core
 	}
 
 
-	public delegate void MouseMoveOperator(AISData ais, Labels labels, double projX, double projY);
+	public delegate void MouseMoveOperator(object result, Shapefile sf, Labels labels, double projX, double projY);
 
-	public delegate void MouseDownOperator(Labels labels, double projX, double proj);
+	public delegate void MouseDownOperator(object result, Shapefile sf, Labels labels, double projX, double projY);
 }

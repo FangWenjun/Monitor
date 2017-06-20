@@ -133,6 +133,7 @@
     <Compile Include="Map\MapDraw.cs" />
     <Compile Include="Map\MapLayer.cs" />
     <Compile Include="Map\Operation.cs" />
+    <Compile Include="Map\ShapeFileHandle.cs" />
     <Compile Include="Map\TempDataLoad.cs" />
     <Compile Include="Map\TempHieraDisplay.cs" />
     <Compile Include="Program.cs" />

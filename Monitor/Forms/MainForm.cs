@@ -5,13 +5,13 @@ using System.Data;
 using System.Windows.Forms;
 using Monitor.Classes;
 using WeifenLuo.WinFormsUI.Docking;
-using Monitor.Map;			  
+using Monitor.Map;
 using Monitor.DataTransfer;
 using System.IO;
 using AxMapWinGIS;
 using MapWinGIS;
 using Monitor.Core;
-
+using System.Diagnostics;
 
 namespace Monitor
 {
@@ -22,18 +22,23 @@ namespace Monitor
         /// </summary>
         private AppDispatcher _dispatcher = new AppDispatcher();
 		private ControlMapForm _mapForm = null;
+		private ShapeFileHandle sfHandle;
+
+
 		public AISData ais = null;
 		public classDrawLine drawLine ;
 		public classDrawPoint drawPoint;
 
 		public MapLayer mapLayer;
 		public classDrawPoint drawPoint_Ais;
+		public classAddText addText;
 
 		private int MainLayerHandle;   //底图句柄（需要缩放的地图级别）
 
 		private PointSet pointSet;
-		private List<Shapefile> sf_mouseMove = new List<Shapefile>();
-		private List<Shapefile> sf_mouseDown = new List<Shapefile>();
+		//private List<Shapefile> sf_mouseMove = new List<Shapefile>();
+		//private List<Shapefile> sf_mouseDown = new List<Shapefile>();
+		
 
 
 
@@ -109,6 +114,8 @@ namespace Monitor
 			MouseMoveOperator mouseMoveOperate;
 			MouseDownOperator mouseDownOperate;
 
+			sfHandle = new ShapeFileHandle(_mapForm.Map);
+
 			#region	加载gis地图
 			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\底图.shp",@"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" };
 			mapLayer = new MapLayer();
@@ -145,13 +152,9 @@ namespace Monitor
 
 			//3、在地图上加载ais数据
 			pointSet = new PointSet("AisReal", tkDefaultPointSymbol.dpsTriangleUp, tkMapColor.Red, 16);
-		//	drawPoint_Ais.CreatPoint(ais.point, pointSet);
-		//	sf_mouseMove.Add(drawPoint_Ais.Shp);
-
-
-
-
-
+			drawPoint_Ais.CreatPoint(ais.point, pointSet);
+			drawPoint_Ais.EditAttribute();
+			sfHandle.AddMouseMoveShapeFile("Ais", drawPoint_Ais.LayerHandle);
 			#endregion
 
 
@@ -160,14 +163,17 @@ namespace Monitor
 			var pnt = new ClassPoint();
 			pnt.x = 121.907567728461;
 			pnt.y = 30.8729913928844;
+			pnt.str = "图片详情";
 			string path = new DirectoryInfo("../../../../").FullName +"Monitor\\Monitor\\data\\ship3.png";
 			drawPoint.AddPicture(pnt, path);
-			sf_mouseDown.Add(drawPoint.Shp);
+			drawPoint.EditAttribute();
+			sfHandle.AddMouseDownShapeFile("pic",drawPoint.LayerHandle);
 			#endregion
 
 
-			_mapForm.SfMouseMove = sf_mouseMove;
-			_mapForm.SfMouseDown = sf_mouseDown;
+			_mapForm.Sf_MouseMove = sfHandle.Sf_MouseMove;
+			_mapForm.Sf_MouseDown = sfHandle.Sf_MouseDown;
+
 
 			mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
 			mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
@@ -176,20 +182,15 @@ namespace Monitor
 			MapForm.MouseMoveOperate = mouseMoveOperate;
 			MapForm.mouseDownOperate = mouseDownOperate;
 
-
-		
+			var point = new ClassPoint();
+			point.x = 121.907567728461;
+			point.y = 30.8739913928844;
+			addText = new classAddText(_mapForm.Map, MainLayerHandle);
+			addText.AddText(point.x, point.y);
 
 
 
 			
-
-
-
-
-
-
-
-
 		}
 
 	
@@ -234,11 +235,18 @@ namespace Monitor
 
 		private void timerTick(object sender, EventArgs e)
 		{
-			drawPoint_Ais.RemoveLayer();
-			drawPoint_Ais.CreatPoint(ais.point, pointSet);
-			sf_mouseMove.Add(drawPoint_Ais.Shp);
 
-			
+			drawPoint_Ais.RemoveLayer();
+			_mapForm.Map.LockWindow(tkLockMode.lmLock);
+			drawPoint_Ais.CreatPoint(ais.point, pointSet);
+			drawPoint_Ais.EditAttribute();
+			_mapForm.Map.LockWindow(tkLockMode.lmUnlock);
+			sfHandle.AddMouseMoveShapeFile("Ais", drawPoint_Ais.LayerHandle);
+			int numlayer = _mapForm.Map.NumLayers;
+			Debug.Print("图层数目："+numlayer);
+
+
+
 
 		}
 	}

@@ -10,6 +10,7 @@ using System.Data;
 using System.IO;
 using Monitor.Map;
 using Monitor.Core;
+using System.Windows.Forms;
 
 namespace Monitor.Map
 {
@@ -124,12 +125,16 @@ namespace Monitor.Map
 	public class classDrawPoint: IDrawPoint
 	{
 		private  AxMap map;
-		//	public static Shapefile sf = new Shapefile();
 		private Shapefile sf = new Shapefile() ;
-
+	//	private Shape sonshp = new Shape();
 		private int layerHandle = -1;
-
 		private int shapindex = -1;
+		private ClassPoint[] pointData;
+
+		public int LayerHandle
+		{
+			get { return layerHandle; }
+		}
 
 
 
@@ -154,11 +159,17 @@ namespace Monitor.Map
 			}
 		}
 
+		public ClassPoint[] PointData
+		{
+			set { pointData = value; }
+			get { return pointData; }
+		}
+
 		public classDrawPoint(AxMap map)
 		{
 			this.map = map;
-			sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
-
+			sf.CreateNewWithShapeID("", ShpfileType.SHP_POINT);
+			//sonshp.Create(ShpfileType.SHP_MULTIPOINT);
 		}
 
 	  
@@ -168,36 +179,78 @@ namespace Monitor.Map
 		/// <param name="data"></param>
 		/// <param name="pointSet"></param>
 		/// <returns></returns>
+		//public int CreatPoint(ClassPoint[] data, PointSet pointSet)
+		//{
+		//	pointData = data;
+		
+		//	for(int i = 0;i < data.Length;i++)
+		//	{
+
+		//		var pnt = new Point();
+		//		pnt.x = data[i].x;
+		//		pnt.y = data[i].y;
+
+		//		int index = 0;
+		//		sonshp.InsertPoint(pnt, ref index);
+
+		//	}
+		//	sf.EditInsertShape(sonshp, ref shapindex);
+
+		//	ShapefileCategory ct = sf.Categories.Add(pointSet.categroyName);
+		//	var utils = new Utils();
+		//	ct.DrawingOptions.PointSize = pointSet.size;
+		//	ct.DrawingOptions.FillColor = utils.ColorByName(pointSet.color);
+		//	ct.DrawingOptions.SetDefaultPointSymbol(pointSet.shape);
+		//	sf.set_ShapeCategory2(shapindex, pointSet.categroyName);
+
+		//	layerHandle = Map.AddLayer(sf, true);
+		//	return layerHandle;
+
+		//}
+
+
 		public int CreatPoint(ClassPoint[] data, PointSet pointSet)
 		{
-			
-			Shape shp = new Shape(); //创建shp图层
-			shp.Create(ShpfileType.SHP_MULTIPOINT);
+			pointData = data;
+
 			for(int i = 0;i < data.Length;i++)
 			{
 
 				var pnt = new Point();
 				pnt.x = data[i].x;
 				pnt.y = data[i].y;
+				Shape shp = new Shape();
+				shp.Create(ShpfileType.SHP_POINT);
 
 				int index = 0;
 				shp.InsertPoint(pnt, ref index);
+				sf.EditInsertShape(shp, ref shapindex);
 
 			}
-			sf.EditInsertShape(shp, ref shapindex);
 
-			ShapefileCategory ct = sf.Categories.Add(pointSet.categroyName);
 			var utils = new Utils();
-			ct.DrawingOptions.PointSize = pointSet.size;
-			ct.DrawingOptions.FillColor = utils.ColorByName(pointSet.color);
-			ct.DrawingOptions.SetDefaultPointSymbol(pointSet.shape);
-			sf.set_ShapeCategory2(shapindex, pointSet.categroyName);
-
+			sf.DefaultDrawingOptions.SetDefaultPointSymbol(pointSet.shape);
+			sf.DefaultDrawingOptions.PointSize = pointSet.size;
+			sf.DefaultDrawingOptions.FillColor = utils.ColorByName(pointSet.color);
 			layerHandle = Map.AddLayer(sf, true);
-			Map.SendMouseMove = true;
 			return layerHandle;
 
 		}
+
+		public  void EditAttribute()
+		{
+			if(!sf.StartEditingShapes(true, null))
+			{
+				MessageBox.Show("Failed to start edit mode: " + sf.ErrorMsg[sf.LastErrorCode]);
+			}
+			else
+			{
+				int fieldIndex = sf.EditAddField("shapeStr", FieldType.STRING_FIELD, 0, 0);
+				for(int i = 0;i < sf.NumShapes;i++)
+					sf.EditCellValue(fieldIndex, i, pointData[i].str);
+			}
+		}
+
 
 
 
@@ -209,9 +262,12 @@ namespace Monitor.Map
 		/// <returns></returns>
 		public int AddPicture(ClassPoint data, string path)
 		{
+			pointData = new ClassPoint[1];
+			PointData[0] = new ClassPoint();
+			pointData[0] = data;
 			
 			Shape shp = new Shape(); //创建shp图层
-			shp.Create(ShpfileType.SHP_MULTIPOINT);
+			shp.Create(ShpfileType.SHP_POINT);
 			var pnt = new Point();
 			pnt.x = data.x;
 			pnt.y = data.y;
@@ -240,14 +296,63 @@ namespace Monitor.Map
 		{
 			if(layerHandle != -1)
 			{
+
+				//sonshp.Clear();
+				//sf.Close();
+				//map.ClearDrawing(layerHandle);
 				map.RemoveLayer(layerHandle);
+				
 				sf = new Shapefile();
-				sf.CreateNewWithShapeID("", ShpfileType.SHP_MULTIPOINT);
+				sf.CreateNewWithShapeID("", ShpfileType.SHP_POINT);
 
 			}
 		
 
 		}
+
+	}
+
+	public class  classAddText
+	{
+		private Labels labels = new Labels();
+		private AxMap map;
+		private Shapefile sf = new Shapefile();
+
+		public classAddText(AxMap map, int layerHandle)
+		{
+			this.map = map;
+			this.sf = map.get_Shapefile(layerHandle);
+
+		}
+
+		public Shapefile Shp
+		{
+			set { sf = value; }
+			get { return sf; }
+		}
+
+
+		public void AddText(double x, double y )
+		{
+			Labels labels = sf.Labels;
+			labels.FontSize = 15;
+			labels.FontBold = true;
+			labels.FrameVisible = false;
+			labels.FrameType = tkLabelFrameType.lfRectangle;
+			labels.AutoOffset = false;
+			labels.OffsetX = 40;
+
+			LabelCategory cat = labels.AddCategory("wenzi");
+			cat.FontColor = 255;
+			
+
+			string aisLabel = "文字部分";
+			labels.AddLabel(aisLabel, x, y, 0.0, -1);
+
+		}
+
+
+			
 
 	}
 
