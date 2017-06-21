@@ -16,6 +16,7 @@ namespace ToolBar
     {
         private AxMap map = null;
 		private ControlMapForm mapform;
+		private int mainLayerHandle;
 
 
         private readonly AppDispatcher _dispatcher = new AppDispatcher();
@@ -34,6 +35,11 @@ namespace ToolBar
                 map = value;
             }
         }
+
+		public int MainLayerHandle
+		{
+			set { mainLayerHandle = value; }
+		}
 
 		public ControlMapForm MapForm
 		{
@@ -61,9 +67,16 @@ namespace ToolBar
 
         private void InitMenus()
         {
+			
             Dispatcher.InitMenu(_toolStripLayer.Items);
 			
         }
+
+		public void SetMainLayerHandle()
+		{
+			Dispatcher.LayerHandle = mainLayerHandle;
+
+		}
 
 		public void InitAttri()
 		{

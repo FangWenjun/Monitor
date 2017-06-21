@@ -117,14 +117,17 @@ namespace Monitor
 			sfHandle = new ShapeFileHandle(_mapForm.Map);
 
 			#region	加载gis地图
-			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\底图.shp",@"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp" };
+			string[] str = { @"D:\光纤传感监测系统\Monitor\Monitor\data\底图.shp" ,  @"D:\光纤传感监测系统\Monitor\Monitor\data\省界WGS 84.shp"  ,@"D:\光纤传感监测系统\Monitor\Monitor\data\海缆WGS 84.tif"};
 			mapLayer = new MapLayer();
-			MainLayerHandle = mapLayer.AddLayer(_mapForm.Map,str);
+			MainLayerHandle = mapLayer.AddLayer(_mapForm.Map,str,"底图");
+
+			_mapForm.MainLayerHandle = MainLayerHandle;
+			_mapForm.SetMainLayerHandle();
 			#endregion
 
 
 			//	_mapForm.Map.ZoomToMaxExtents();
-			//	_mapForm.Map.ZoomToLayer(MainLayerHandle);
+			_mapForm.Map.ZoomToLayer(MainLayerHandle);
 
 
 
@@ -182,15 +185,15 @@ namespace Monitor
 			MapForm.MouseMoveOperate = mouseMoveOperate;
 			MapForm.mouseDownOperate = mouseDownOperate;
 
-			var point = new ClassPoint();
-			point.x = 121.907567728461;
-			point.y = 30.8739913928844;
-			addText = new classAddText(_mapForm.Map, MainLayerHandle);
-			addText.AddText(point.x, point.y);
+			//var point = new ClassPoint();
+			//point.x = 121.907567728461;
+			//point.y = 30.8739913928844;
+			//addText = new classAddText(_mapForm.Map, MainLayerHandle);
+			//addText.AddText(point.x, point.y);
 
 
 
-			
+
 		}
 
 	

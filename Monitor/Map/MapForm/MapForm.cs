@@ -24,6 +24,7 @@ namespace Monitor.Map
 		private  ToolControl  m_toolControl = null;
 		private  Labels labels;
 		private  int movemoveenter = 0;
+		private  int mainLayerHandle;
 	
 
 		//用于判断是否已经显示label
@@ -64,6 +65,11 @@ namespace Monitor.Map
 		public ToolControl toolControl
 		{
 			get { return m_toolControl; }
+		}
+
+		public int MainLayerHandle
+		{
+			set { mainLayerHandle = value; }
 		}
 
 		public string[] MapPath
@@ -131,30 +137,39 @@ namespace Monitor.Map
 			m_toolControl.Map = Map;
 			m_toolControl.MapForm = this;
 			m_toolControl.InitAttri();
+			
 
 
 
 		
 		}
 
+		public void SetMainLayerHandle()
+		{
+			m_toolControl.MainLayerHandle = mainLayerHandle;
+			m_toolControl.SetMainLayerHandle();
+
+		}
+
 
 
 		private void MapInit()
         {
-            axMap1.GrabProjectionFromData = true;
+         axMap1.GrabProjectionFromData = true;
 			axMap1.SendMouseMove = true;
-            axMap1.SendSelectBoxFinal = true;
+     //       axMap1.SendSelectBoxFinal = true;
             axMap1.SendMouseDown = true;
             axMap1.SendMouseUp = true;
-            axMap1.InertiaOnPanning = tkCustomState.csAuto;
-            axMap1.ShowRedrawTime = false;
-            Map.Identifier.IdentifierMode = tkIdentifierMode.imSingleLayer;
-            Map.Identifier.HotTracking = true;
-            Map.ShapeEditor.HighlightVertices = tkLayerSelection.lsNoLayer;
-            Map.ShapeEditor.SnapBehavior = tkLayerSelection.lsNoLayer;
-            axMap1.Measuring.UndoButton = tkUndoShortcut.usCtrlZ;
-			axMap1.Projection = tkMapProjection.PROJECTION_WGS84;
+    //        axMap1.InertiaOnPanning = tkCustomState.csAuto;
+          axMap1.ShowRedrawTime = true;
+            //Map.Identifier.IdentifierMode = tkIdentifierMode.imSingleLayer;
+           //Map.Identifier.HotTracking = true;
+           //Map.ShapeEditor.HighlightVertices = tkLayerSelection.lsNoLayer;
+            //Map.ShapeEditor.SnapBehavior = tkLayerSelection.lsNoLayer;
+            //axMap1.Measuring.UndoButton = tkUndoShortcut.usCtrlZ;
+		//	axMap1.Projection = tkMapProjection.PROJECTION_WGS84;
 			axMap1.TileProvider = tkTileProvider.ProviderNone;  //没有任何背景图
+			axMap1.CursorMode = tkCursorMode.cmPan;
 		}
 
 
@@ -162,8 +177,8 @@ namespace Monitor.Map
 		{
 			axMap1.MouseMoveEvent += axMap1_MouseMoveEvent;
 			axMap1.MouseDownEvent += axMap1_MouseDownEvent;
-		//	mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
-		//	mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
+			//	mouseMoveOperate = new MouseMoveOperator(Operation.AddLabel);
+			//	mouseDownOperate = new MouseDownOperator(Operation.AddLabel);
 		}
 
 	

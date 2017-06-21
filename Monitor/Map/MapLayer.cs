@@ -12,7 +12,7 @@ using Monitor.Core;
 
 namespace Monitor.Map
 {
-	public class MapLayer: IAddLayer
+	public class MapLayer: IAddLayer   
 	{
 
 		private int Add(AxMap map, object layer, bool Visible)
@@ -30,7 +30,7 @@ namespace Monitor.Map
 				return MapLayerHandle;
 			}
 
-	//		MapWinGIS.Shapefile sf = (layer as MapWinGIS.Shapefile);
+			MapWinGIS.Shapefile sf = (layer as MapWinGIS.Shapefile);
 
 			map.LockWindow(MapWinGIS.tkLockMode.lmUnlock);
 
@@ -39,45 +39,9 @@ namespace Monitor.Map
 			return MapLayerHandle;
 		}
 
-		/// <summary>
-		/// 在gis中添加layer,其中layerroute是存.shp文件的路径
-		/// </summary>
-		/// <param name="LayerRoute"></param>
-		public static void AddLayerSta(AxMap map, string[] LayerRoute)
-		{
 		
-			map.LockWindow(tkLockMode.lmLock);
 
-			string layerName = "";
-			try
-			{
-				var fm = new FileManager();
-				foreach(var name in LayerRoute)
-				{
-					layerName = name;
-					var layer = fm.Open(name);
-					if(layer == null)
-					{
-						string msg = string.Format("Failed to open datasource: {0} \n {1}", name, fm.ErrorMsg[fm.LastErrorCode]);
-						MessageHelper.Warn(msg);
-					}
-					else
-					{
-					//	MapLayer.Add(map, layer, true);
-					}
-				}
-			}
-			catch
-			{
-				MessageHelper.Warn("There was a problem opening layer: " + layerName);
-			}
-			finally
-			{
-				map.LockWindow(tkLockMode.lmUnlock);
-			}
-		}
-
-		public int AddLayer(AxMap map, string[] LayerRoute)
+		public int AddLayer(AxMap map, string[] LayerRoute ,string mapName)
 		{
 			int layerHandle = 1;
 			map.LockWindow(tkLockMode.lmLock);
@@ -99,7 +63,7 @@ namespace Monitor.Map
 					}
 					else
 					{
-						if(str_filename == "底图")
+						if(str_filename == mapName)
 						{
 							layerHandle = Add(map, layer, true);
 
@@ -121,7 +85,7 @@ namespace Monitor.Map
 			{
 				map.LockWindow(tkLockMode.lmUnlock);
 			}
-			return 0;
+			return layerHandle;
 		}
 	}
 }

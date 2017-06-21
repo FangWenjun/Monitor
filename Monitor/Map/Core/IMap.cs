@@ -12,7 +12,7 @@ namespace Monitor.Core
 {
 	public interface IAddLayer
 	{
-		int AddLayer(AxMap Map, string[] LayerRoute);
+		int AddLayer(AxMap map, string[] LayerRoute, string mapName);
 
 	}
 
