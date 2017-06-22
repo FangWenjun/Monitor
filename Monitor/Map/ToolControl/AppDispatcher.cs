@@ -70,33 +70,15 @@ namespace ToolBar.Classes
         {
             switch (command)
             {
-                case AppCommand.SelectByPolygon:
-                    return SetMapCursor(tkCursorMode.cmSelectByPolygon);
-                case AppCommand.Identify:
-                    return SetMapCursor(tkCursorMode.cmIdentify);
-                case AppCommand.Measure:
-                    App.Map.Measuring.MeasuringType = tkMeasuringType.MeasureDistance;
-                    return SetMapCursor(tkCursorMode.cmMeasure);
-                case AppCommand.MeasureArea:
-                    App.Map.Measuring.MeasuringType = tkMeasuringType.MeasureArea;
-                    return SetMapCursor(tkCursorMode.cmMeasure);
+            
                 case AppCommand.Pan:
                     return SetMapCursor(tkCursorMode.cmPan);
-                case AppCommand.Select:
-                    return SetMapCursor(tkCursorMode.cmSelection);
-                case AppCommand.ZoomIn:
-                    return SetMapCursor(tkCursorMode.cmZoomIn);
-
-                case AppCommand.ZoomOut:
-                    return SetMapCursor(tkCursorMode.cmZoomOut);
-                case AppCommand.ZoomToSelected:
-                    LayerHelper.ZoomToSelected();
-                    break;
-      
                 case AppCommand.Click:
 					LayerHelper.MouseClickMode(map, MapForm);
-                    break;
-                case AppCommand.None:
+					return true;
+				case AppCommand.Help:
+					string str = "1.拖动按妞可上下左右拖动地图\r\n2.还原地图按钮可还原地图至最初大小\r\n3.点击模式按钮可将鼠标设置成点击模式";
+					MessageBox.Show(str);
                     return true;
             }
             return false;

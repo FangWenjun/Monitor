@@ -150,10 +150,10 @@
     <Compile Include="Map\ToolControl\MessageHelper.cs" />
     <Compile Include="Map\ToolControl\Project.cs" />
     <Compile Include="Map\ToolControl\ProjectBase.cs" />
-    <Compile Include="Map\ToolControl\UserControl1.cs">
+    <Compile Include="Map\ToolForm\UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Map\ToolControl\UserControl1.designer.cs">
+    <Compile Include="Map\ToolForm\UserControl1.designer.cs">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Forms\MainForm.resx">
@@ -170,7 +170,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Map\ToolControl\UserControl1.resx">
+    <EmbeddedResource Include="Map\ToolForm\UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -245,7 +245,9 @@
   <ItemGroup>
     <None Include="Resources\click.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\help.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

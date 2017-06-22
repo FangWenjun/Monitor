@@ -48,7 +48,7 @@ namespace Monitor.Map
 		public IDrawLine drawLine ;
 		public IDrawPoint drawPoint;
 
-		public AISData ais = null;
+	//	public AISData ais = null;
 		public IDrawPoint drawPoint_Ais = null;
 
 		public MouseMoveOperator mouseMoveOperate;
@@ -130,7 +130,7 @@ namespace Monitor.Map
 			m_toolControl = new ToolControl();
 			this.Controls.Add(m_toolControl);
 			m_toolControl.Location = new System.Drawing.Point(60, 10);
-			m_toolControl.Size = new System.Drawing.Size(147, 50);
+			m_toolControl.Size = new System.Drawing.Size(122, 28);
 			m_toolControl.Dock = DockStyle.None;
 			m_toolControl.BringToFront();
 
@@ -170,6 +170,13 @@ namespace Monitor.Map
 		//	axMap1.Projection = tkMapProjection.PROJECTION_WGS84;
 			axMap1.TileProvider = tkTileProvider.ProviderNone;  //没有任何背景图
 			axMap1.CursorMode = tkCursorMode.cmPan;
+			axMap1.ShowCoordinates = tkCoordinatesDisplay.cdmDegrees;
+			axMap1.ShowCoordinatesFormat = tkAngleFormat.afDegrees;
+			axMap1.MapUnits = tkUnitsOfMeasure.umMeters;
+			axMap1.ScalebarVisible = true;
+			axMap1.ScalebarUnits = tkScalebarUnits.Metric;
+			axMap1.ShowZoomBar = true ;
+			axMap1.UseWaitCursor = false;
 		}
 
 

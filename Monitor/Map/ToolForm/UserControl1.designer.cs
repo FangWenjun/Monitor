@@ -29,11 +29,10 @@
 		private void InitializeComponent()
 		{
 			this._toolStripLayer = new System.Windows.Forms.ToolStrip();
-			this.toolZoomIn = new System.Windows.Forms.ToolStripButton();
-			this.toolZoomOut = new System.Windows.Forms.ToolStripButton();
-			this.toolZoomToLayer = new System.Windows.Forms.ToolStripButton();
 			this.toolPan = new System.Windows.Forms.ToolStripButton();
+			this.toolZoomToLayer = new System.Windows.Forms.ToolStripButton();
 			this.toolClick = new System.Windows.Forms.ToolStripButton();
+			this.toolHelp = new System.Windows.Forms.ToolStripButton();
 			this._toolStripLayer.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -42,46 +41,49 @@
 			this._toolStripLayer.AutoSize = false;
 			this._toolStripLayer.Dock = System.Windows.Forms.DockStyle.None;
 			this._toolStripLayer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolZoomIn,
-			this.toolZoomOut,
-			this.toolZoomToLayer,
-			this.toolPan,
-			this.toolClick});
+            this.toolPan,
+            this.toolZoomToLayer,
+            this.toolClick,
+            this.toolHelp});
 			this._toolStripLayer.Location = new System.Drawing.Point(0, 0);
 			this._toolStripLayer.Name = "_toolStripLayer";
-			this._toolStripLayer.Size = new System.Drawing.Size(147, 50);
+			this._toolStripLayer.Size = new System.Drawing.Size(122, 28);
 			this._toolStripLayer.TabIndex = 0;
-			// 
-			// toolZoomIn
-			// 
-			this.toolZoomIn.Image = global::Monitor.Properties.Resources.zoom_in;
-			this.toolZoomIn.Name = "toolZoomIn";
-			this.toolZoomIn.Size = new System.Drawing.Size(23, 47);
-			// 
-			// toolZoomOut
-			// 
-			this.toolZoomOut.Image = global::Monitor.Properties.Resources.zoom_out;
-			this.toolZoomOut.Name = "toolZoomOut";
-			this.toolZoomOut.Size = new System.Drawing.Size(23, 47);
-			// 
-			// toolZoomToLayer
-			// 
-			this.toolZoomToLayer.Image = global::Monitor.Properties.Resources.zoom_layer;
-			this.toolZoomToLayer.Name = "toolZoomToLayer";
-			this.toolZoomToLayer.Size = new System.Drawing.Size(23, 47);
 			// 
 			// toolPan
 			// 
+			this.toolPan.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolPan.Image = global::Monitor.Properties.Resources.pan1;
 			this.toolPan.Name = "toolPan";
-			this.toolPan.Size = new System.Drawing.Size(23, 47);
+			this.toolPan.Size = new System.Drawing.Size(23, 25);
+			this.toolPan.ToolTipText = "拖动\\滚轮放大缩小";
+			// 
+			// toolZoomToLayer
+			// 
+			this.toolZoomToLayer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolZoomToLayer.Image = global::Monitor.Properties.Resources.zoom_layer;
+			this.toolZoomToLayer.Name = "toolZoomToLayer";
+			this.toolZoomToLayer.Size = new System.Drawing.Size(23, 25);
+			this.toolZoomToLayer.ToolTipText = "还原地图大小";
 			// 
 			// toolClick
 			// 
+			this.toolClick.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolClick.Image = global::Monitor.Properties.Resources.click;
 			this.toolClick.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolClick.Name = "toolClick";
-			this.toolClick.Size = new System.Drawing.Size(23, 47);
+			this.toolClick.Size = new System.Drawing.Size(23, 25);
+			this.toolClick.ToolTipText = "鼠标点击模式";
+			// 
+			// toolHelp
+			// 
+			this.toolHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolHelp.Image = global::Monitor.Properties.Resources.help;
+			this.toolHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolHelp.Name = "toolHelp";
+			this.toolHelp.Size = new System.Drawing.Size(23, 25);
+			this.toolHelp.Text = "toolStripButton1";
+			this.toolHelp.ToolTipText = "帮助";
 			// 
 			// ToolControl
 			// 
@@ -89,7 +91,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._toolStripLayer);
 			this.Name = "ToolControl";
-			this.Size = new System.Drawing.Size(147, 50);
+			this.Size = new System.Drawing.Size(122, 28);
 			this._toolStripLayer.ResumeLayout(false);
 			this._toolStripLayer.PerformLayout();
 			this.ResumeLayout(false);
@@ -97,11 +99,10 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.ToolStripButton toolZoomIn;
-		private System.Windows.Forms.ToolStripButton toolZoomOut;
 		private System.Windows.Forms.ToolStripButton toolZoomToLayer;
 		private System.Windows.Forms.ToolStripButton toolPan;
 		private System.Windows.Forms.ToolStrip _toolStripLayer;
 		private System.Windows.Forms.ToolStripButton toolClick;
+		private System.Windows.Forms.ToolStripButton toolHelp;
 	}
 }

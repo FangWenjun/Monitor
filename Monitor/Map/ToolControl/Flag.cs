@@ -37,7 +37,8 @@ namespace ToolBar.Classes
         Snapshot = 26,
         ZoomMax = 27,
         LoadData = 28,
-		Click = 29
+		Click = 29,
+		Help = 30
     }
 
     public enum FileType
