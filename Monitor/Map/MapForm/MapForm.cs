@@ -129,8 +129,8 @@ namespace Monitor.Map
 			//ToolControl控件动态加载
 			m_toolControl = new ToolControl();
 			this.Controls.Add(m_toolControl);
-			m_toolControl.Location = new System.Drawing.Point(60, 10);
-			m_toolControl.Size = new System.Drawing.Size(122, 28);
+            m_toolControl.Location = new System.Drawing.Point(30, 5);
+			m_toolControl.Size = new System.Drawing.Size(92, 28);
 			m_toolControl.Dock = DockStyle.None;
 			m_toolControl.BringToFront();
 

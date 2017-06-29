@@ -238,7 +238,7 @@ namespace Monitor
 
 		private void timerTick(object sender, EventArgs e)
 		{
-
+			drawLine.RemoveLayer();
 			drawPoint_Ais.RemoveLayer();
 			_mapForm.Map.LockWindow(tkLockMode.lmLock);
 			drawPoint_Ais.CreatPoint(ais.point, pointSet);

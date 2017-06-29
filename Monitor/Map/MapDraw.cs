@@ -44,6 +44,8 @@ namespace Monitor.Map
 
 		public classDrawLine(AxMap map)
 		{
+			sf.CreateNew("", ShpfileType.SHP_POLYLINE);
+
 			this.map = map;
 		} 
 
@@ -68,9 +70,25 @@ namespace Monitor.Map
 		/// <param name="Yend"></param>
 		public int WriteLine(ClassLine line, LineSet lineSet)
 		{
-			var axMap1 = map;
-			var sf = CreateLines(line.startX,line.startY, line.endX, line.endY);
-			layerHandle = axMap1.AddLayer(sf, true);
+			Shape shp = new Shape();
+			shp.Create(ShpfileType.SHP_POLYLINE);
+
+			Point pnt = new Point();
+			pnt.x = line.startX;
+			pnt.y = line.startY;
+			int index = shp.numPoints;
+			shp.InsertPoint(pnt, ref index);
+
+			pnt = new Point();
+			pnt.x = line.endX;
+			pnt.y = line.endY;
+			index = shp.numPoints;
+			shp.InsertPoint(pnt, ref index);
+
+			index = sf.NumShapes;
+			sf.EditInsertShape(shp, ref index);
+
+			layerHandle = map.AddLayer(sf, true);
 			var utils = new Utils();
 			LinePattern pattern = new LinePattern();
 			pattern.AddLine(utils.ColorByName(lineSet.color), lineSet.Width, lineSet.style);
@@ -82,40 +100,19 @@ namespace Monitor.Map
 		}
 
 
-		// <summary>
-		// This function creates a number of parallel polylines (segments)
-		// </summary>
-		private  Shapefile CreateLines(double Xstart, double Ystart, double Xend, double Yend)
-		{
-			Shapefile sf = new Shapefile();
-			sf.CreateNew("", ShpfileType.SHP_POLYLINE);
-
-			Shape shp = new Shape();
-			shp.Create(ShpfileType.SHP_POLYLINE);
-
-			Point pnt = new Point();
-			pnt.x = Xstart;
-			pnt.y = Ystart;
-			int index = shp.numPoints;
-			shp.InsertPoint(pnt, ref index);
-
-			pnt = new Point();
-			pnt.x = Xend;
-			pnt.y = Yend;
-			index = shp.numPoints;
-			shp.InsertPoint(pnt, ref index);
-
-			index = sf.NumShapes;
-			sf.EditInsertShape(shp, ref index);
-
-			return sf;
-		}
-
 		public void RemoveLayer()
 		{
-			map.RemoveLayer(layerHandle);
-			sf = new Shapefile();
-			
+			if(layerHandle != -1)
+			{
+				map.RemoveLayer(layerHandle);
+
+				sf = new Shapefile();
+				sf.CreateNew("", ShpfileType.SHP_POLYLINE);
+				layerHandle = -1;
+
+			}
+
+
 		}
 
 
@@ -173,40 +170,7 @@ namespace Monitor.Map
 		}
 
 	  
-		/// <summary>
-		/// 在地图上画点
-		/// </summary>
-		/// <param name="data"></param>
-		/// <param name="pointSet"></param>
-		/// <returns></returns>
-		//public int CreatPoint(ClassPoint[] data, PointSet pointSet)
-		//{
-		//	pointData = data;
 		
-		//	for(int i = 0;i < data.Length;i++)
-		//	{
-
-		//		var pnt = new Point();
-		//		pnt.x = data[i].x;
-		//		pnt.y = data[i].y;
-
-		//		int index = 0;
-		//		sonshp.InsertPoint(pnt, ref index);
-
-		//	}
-		//	sf.EditInsertShape(sonshp, ref shapindex);
-
-		//	ShapefileCategory ct = sf.Categories.Add(pointSet.categroyName);
-		//	var utils = new Utils();
-		//	ct.DrawingOptions.PointSize = pointSet.size;
-		//	ct.DrawingOptions.FillColor = utils.ColorByName(pointSet.color);
-		//	ct.DrawingOptions.SetDefaultPointSymbol(pointSet.shape);
-		//	sf.set_ShapeCategory2(shapindex, pointSet.categroyName);
-
-		//	layerHandle = Map.AddLayer(sf, true);
-		//	return layerHandle;
-
-		//}
 
 
 		public int CreatPoint(ClassPoint[] data, PointSet pointSet)
@@ -296,14 +260,11 @@ namespace Monitor.Map
 		{
 			if(layerHandle != -1)
 			{
-
-				//sonshp.Clear();
-				//sf.Close();
-				//map.ClearDrawing(layerHandle);
 				map.RemoveLayer(layerHandle);
 				
 				sf = new Shapefile();
 				sf.CreateNewWithShapeID("", ShpfileType.SHP_POINT);
+				layerHandle = -1;
 
 			}
 		
