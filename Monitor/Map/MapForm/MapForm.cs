@@ -155,13 +155,13 @@ namespace Monitor.Map
 
 		private void MapInit()
         {
-         axMap1.GrabProjectionFromData = true;
+			axMap1.GrabProjectionFromData = true;
 			axMap1.SendMouseMove = true;
      //       axMap1.SendSelectBoxFinal = true;
             axMap1.SendMouseDown = true;
             axMap1.SendMouseUp = true;
     //        axMap1.InertiaOnPanning = tkCustomState.csAuto;
-          axMap1.ShowRedrawTime = true;
+          axMap1.ShowRedrawTime = false;	 //显示刷新时间
             //Map.Identifier.IdentifierMode = tkIdentifierMode.imSingleLayer;
            //Map.Identifier.HotTracking = true;
            //Map.ShapeEditor.HighlightVertices = tkLayerSelection.lsNoLayer;

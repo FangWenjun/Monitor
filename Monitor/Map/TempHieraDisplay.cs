@@ -52,7 +52,7 @@ namespace Monitor.Map
 					coordinateColor.startPoint.x = tempColor[end].tempData.x;
 					coordinateColor.startPoint.y = tempColor[end].tempData.x;
 					coordinateColor.color = tempColor[start].color;
-					start = i + 1;
+					start = i;
 					coordinateColorList.Add(coordinateColor);
 				}
 			}

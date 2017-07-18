@@ -134,13 +134,21 @@ namespace Monitor
 
 			#region	 在地图上划线
 			ClassLine line = new ClassLine();
+			ClassLine line_1 = new ClassLine();
 			GisPoint gisPoint = new GisPoint();
 			LineSet lineSet = new LineSet(tkMapColor.Yellow, 6.0f, tkDashStyle.dsSolid);
+			LineSet lineSet_1 = new LineSet(tkMapColor.Red, 5.0f,tkDashStyle.dsCustom);
 			gisPoint.connectToDB("Data Source=" + new DirectoryInfo("../../../../").FullName + "Monitor\\Monitor\\data\\data.db");
 			gisPoint.readData();
 			gisPoint.InitLineData(line);
+			line_1.startX = gisPoint.m_PointList[15].X;
+			line_1.startY = gisPoint.m_PointList[15].Y;
+			line_1.endX = gisPoint.m_PointList[20].X;
+			line_1.endY = gisPoint.m_PointList[20].Y;
+
 			drawLine = new classDrawLine(_mapForm.Map);
 			drawLine.WriteLine(line, lineSet);
+			drawLine.WriteLine(line_1, lineSet_1);
 			#endregion
 
 			#region	  在gis地图中添加ais数据

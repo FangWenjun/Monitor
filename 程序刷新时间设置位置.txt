@@ -1,0 +1,2 @@
+1.程序刷新时间设置位置在MapForm.cs文件中的MapInit()函数中ShowRedrawTime开关。
+2.程序地图所有大环境的设置都在MapInit()函数中。

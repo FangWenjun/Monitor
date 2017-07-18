@@ -18,7 +18,7 @@ namespace Monitor.Map
 	public class classDrawLine: IDrawLine
 	{
 		private  AxMap map ;
-		private  Shapefile sf = new Shapefile();
+		private  Shapefile sf;
 		private  int layerHandle;
 
 		public AxMap Map
@@ -44,6 +44,7 @@ namespace Monitor.Map
 
 		public classDrawLine(AxMap map)
 		{
+			sf = new Shapefile();
 			sf.CreateNew("", ShpfileType.SHP_POLYLINE);
 
 			this.map = map;
@@ -70,6 +71,9 @@ namespace Monitor.Map
 		/// <param name="Yend"></param>
 		public int WriteLine(ClassLine line, LineSet lineSet)
 		{
+
+			
+
 			Shape shp = new Shape();
 			shp.Create(ShpfileType.SHP_POLYLINE);
 
@@ -88,14 +92,24 @@ namespace Monitor.Map
 			index = sf.NumShapes;
 			sf.EditInsertShape(shp, ref index);
 
-			layerHandle = map.AddLayer(sf, true);
+			
+			//var utils = new Utils();
+			//LinePattern pattern = new LinePattern();
+			//pattern.AddLine(utils.ColorByName(lineSet.color), lineSet.Width, lineSet.style);
+			//ShapefileCategory ct = sf.Categories.Add("Railroad");
+			//ct.DrawingOptions.LinePattern = pattern;
+			//ct.DrawingOptions.UseLinePattern = true;
+			//sf.set_ShapeCategory(0, 0);
+
 			var utils = new Utils();
 			LinePattern pattern = new LinePattern();
 			pattern.AddLine(utils.ColorByName(lineSet.color), lineSet.Width, lineSet.style);
-			ShapefileCategory ct = sf.Categories.Add("Railroad");
-			ct.DrawingOptions.LinePattern = pattern;
-			ct.DrawingOptions.UseLinePattern = true;
-			sf.set_ShapeCategory(0, 0);
+			sf.DefaultDrawingOptions.LinePattern = pattern;
+			sf.DefaultDrawingOptions.UseLinePattern = true;
+			layerHandle = map.AddLayer(sf, true);
+
+
+
 			return layerHandle; 
 		}
 
